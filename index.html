@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Vinařství Devátý – testovací verze</title>
+  <meta name="description" content="Testovací verze webu pro vinařství s objednávkou přes WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="ageGate" class="age-gate">
+    <div class="age-card">
+      <div class="eyebrow">18+</div>
+      <h2>Vstup pouze pro osoby starší 18 let</h2>
+      <p>Tyto stránky jsou určeny výhradně návštěvníkům starším 18 let. Alkohol neprodáváme osobám mladším 18 let.</p>
+      <div class="row-actions">
+        <button class="btn primary" id="confirmAgeBtn">Je mi 18 a více</button>
+        <a class="btn secondary" href="https://www.google.com">Opustit stránku</a>
+      </div>
+    </div>
+  </div>
+
+  <header id="mainHeader">
+    <a href="#hero" class="brand">
+      <span class="brand-name">Vinařství Devátý</span>
+      <span class="brand-sub">Pod Dubňanskou horou</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about">O nás</a>
+      <a href="#wines">Víno</a>
+      <a href="#contact">Kontakt</a>
+    </nav>
+    <button id="openCartBtn" class="cart-btn">Košík <span id="cartCount">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-badge">Malé vinařství · jižní Morava · poctivé řemeslo</span>
+        <h1>Poctivá vína z vinohradů pod Dubňanskou horou</h1>
+        <p>Testovací verze webu už obsahuje ukázková vína i dočasné obrázky, takže můžeš hned vyzkoušet košík, formulář i WhatsApp objednávku.</p>
+        <div class="hero-features">
+          <span>Objednávka přes WhatsApp</span>
+          <span>Možnost osobního odběru</span>
+          <span>QR potvrzení platby od vinaře</span>
+        </div>
+      </div>
+      <a class="hero-scroll" href="#wines">Procházet vína</a>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-image"><img src="images/about.jpg" alt="Atmosféra vinařství" /></div>
+      <div class="about-text">
+        <div class="eyebrow">O vinařství</div>
+        <h2>Malé vinařství s láskou k řemeslu i krajině</h2>
+        <p>Jsme malé vinařství pod Dubňanskou horou nedaleko Mutěnic, založené lidmi ze severu Čech, kteří si zamilovali moravské vinohrady i poctivé řemeslo.</p>
+        <p>Naším cílem je přenést do každé lahve slunce jižní Moravy, čistý projev odrůdy a radost z dobře odvedené práce.</p>
+      </div>
+    </section>
+
+    <section class="section" id="wines">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow dark">Nabídka</div>
+          <h2>Ukázková vína pro testování</h2>
+        </div>
+        <div class="line"></div>
+      </div>
+      <div id="winesGrid" class="wines-grid"></div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="contact-card">
+        <div>
+          <div class="eyebrow dark">Kontakt</div>
+          <h2>Objednávky a osobní odběr</h2>
+          <p><strong>Vinař:</strong> Ivo Devátý</p>
+          <p><strong>Telefon / WhatsApp:</strong> <a href="https://wa.me/420724366369">724 366 369</a></p>
+          <p><strong>Adresa sklípku pro osobní odběr:</strong> <a href="https://maps.app.goo.gl/jKW1DjUBu9TcTeELA" target="_blank" rel="noopener noreferrer">Pod Dubňansků horů 1213, 696 11 Mutěnice</a></p>
+          <p class="small-note">Pokud zákazník zvolí osobní odběr, víno si může vyzvednout právě na této adrese sklípku.</p>
+          <p><strong>IČO:</strong> Doplňte IČO</p>
+        </div>
+        <div class="contact-note">
+          <h3>Jak probíhá objednávka</h3>
+          <ol>
+            <li>Zákazník vybere vína do košíku a vyplní objednávkový formulář.</li>
+            <li>Web připraví WhatsApp zprávu, ve které bude uvedeno kolik a jakých vín zákazník objednává, plus adresa pro zaslání nebo informace o osobním odběru ve sklípku.</li>
+            <li>Na telefonu zákazník klikne na tlačítko <strong>Otevřít WhatsApp s objednávkou</strong>. Pokud objednává na počítači, může naskenovat QR kód telefonem.</li>
+            <li>V aplikaci WhatsApp se otevře předvyplněná objednávka a zákazník ji jen odešle vinaři.</li>
+            <li>Jakmile vinař objednávku uvidí, potvrdí ji zpět přes WhatsApp a pošle QR kód pro platbu na účet. Tím se objednávka potvrzuje.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>Vinařství Devátý</strong><br>
+      <span>Testovací verze s ukázkovými víny a dočasnými obrázky.</span>
+    </div>
+  </footer>
+
+  <div id="cartOverlay" class="overlay"></div>
+  <aside id="cartPanel" class="cart-panel">
+    <div class="cart-head"><h3>Váš košík</h3><button id="closeCartBtn" class="icon-btn">✕</button></div>
+    <div id="cartItems" class="cart-items"><div id="cartEmpty" class="cart-empty">Košík je prázdný.</div></div>
+    <div class="cart-foot"><div class="cart-total"><span>Celkem</span><strong id="cartTotal">0 Kč</strong></div><button id="checkoutBtn" class="btn primary full">Přejít k objednávce</button></div>
+  </aside>
+
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-card">
+      <div id="formScreen">
+        <h2>Objednávka</h2>
+        <p class="modal-sub">Vyplň údaje – po potvrzení se otevře WhatsApp s předvyplněnou zprávou objednávky.</p>
+        <div class="order-summary"><h4>Shrnutí objednávky</h4><div id="orderLines"></div></div>
+        <form id="checkoutForm">
+          <div class="grid-two">
+            <label>Jméno a příjmení *<input id="fieldName" type="text" required placeholder="Jan Novák" /></label>
+            <label>Telefon *<input id="fieldPhone" type="tel" required placeholder="+420 777 123 456" /></label>
+          </div>
+          <label>E-mail (volitelně)<input id="fieldEmail" type="email" placeholder="jan@example.cz" /></label>
+          <label>Doručovací adresa / osobní odběr<textarea id="fieldAddress" placeholder="Ulice, město, PSČ – nebo napiš osobní odběr"></textarea></label>
+          <label>Poznámka<textarea id="fieldNote" placeholder="Váš vzkaz..."></textarea></label>
+          <label class="checkbox"><input id="ageConfirmOrder" type="checkbox" required /> Potvrzuji, že mi je 18 let nebo více.</label>
+          <button class="btn primary full" type="submit">Připravit WhatsApp objednávku</button>
+          <button class="btn secondary full" type="button" id="backToCartBtn">← Zpět do košíku</button>
+        </form>
+      </div>
+
+      <div id="confirmScreen" class="hidden">
+        <div class="confirm-top">
+          <div class="bubble">💬</div>
+          <h2>WhatsApp objednávka připravena</h2>
+          <p class="modal-sub">Na telefonu klikni na tlačítko níže. Pokud objednáváš na počítači, můžeš naskenovat QR kód telefonem. V obou případech se otevře WhatsApp s předvyplněnou objednávkou.</p>
+        </div>
+        <div class="qr-box">
+          <h3>Otevřít WhatsApp</h3>
+          <p>QR kód obsahuje odkaz na WhatsApp chat s Ivo Devátým a připravenou zprávou objednávky.</p>
+          <div id="qrcode"></div>
+          <div id="waDetail" class="wa-detail"></div>
+        </div>
+        <a id="whatsAppOrderBtn" class="btn primary full" href="#" target="_blank" rel="noopener noreferrer">Otevřít WhatsApp s objednávkou</a>
+        <button class="btn secondary full" type="button" id="finishOrderBtn">Hotovo – zavřít</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Placeholder obrázky jsou už uvnitř balíčku. Později je můžeš přepsat vlastními soubory se stejnými názvy.
