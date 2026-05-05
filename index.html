@@ -30,6 +30,22 @@
     .poll-bar{height:10px;background:rgba(15,23,42,.08);border-radius:999px;overflow:hidden}
     .poll-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#22c55e);width:0%}
     .poll-num{font-variant-numeric:tabular-nums;text-align:right;color:rgba(15,23,42,.7)}
+
+    /* --- Trust / pickup notices --- */
+    .trust-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .trust-pill{background:rgba(255,255,255,.92);color:#1f2937;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:10px 14px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+    .info-box{background:rgba(255,255,255,.92);border:1px solid rgba(15,23,42,.09);border-left:5px solid #7c3aed;border-radius:16px;padding:16px 18px;margin:16px 0;box-shadow:0 8px 28px rgba(15,23,42,.06)}
+    .info-box strong{display:block;margin-bottom:6px}
+    .pickup-options{display:grid;gap:10px;margin-top:8px}
+    .pickup-option{display:flex;gap:10px;align-items:flex-start;border:1px solid rgba(15,23,42,.12);border-radius:14px;padding:12px;background:#fff;cursor:pointer}
+    .pickup-option input{margin-top:3px}
+    .pickup-option span{display:block}
+    .pickup-option small{display:block;color:rgba(15,23,42,.65);margin-top:3px;line-height:1.35}
+
+    /* Fallback visibility classes for cart/order buttons */
+    .overlay.open,.overlay.active,.modal-overlay.open,.modal-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
+    .cart-panel.open,.cart-panel.active{transform:translateX(0);visibility:visible}
+
   </style>
 
 </head>
@@ -70,7 +86,12 @@
         <div class="hero-features">
           <span data-i18n="hero.f1">Objednávka přes WhatsApp</span>
           <span data-i18n="hero.f2">Možnost osobního odběru</span>
-          <span data-i18n="hero.f3">QR potvrzení platby od vinaře</span>
+          <span data-i18n="hero.f3">Platba až při předání nebo po domluvě QR</span>
+        </div>
+        <div class="trust-strip" aria-label="Informace k platbě a převzetí">
+          <span class="trust-pill" data-i18n="trust.noPrepay">Bez platby předem</span>
+          <span class="trust-pill" data-i18n="trust.cash">Ideálně z ruky do ruky při předání</span>
+          <span class="trust-pill" data-i18n="trust.shipping">Zaslání jen po domluvě a minimálně celý karton</span>
         </div>
       </div>
       <a class="hero-scroll" href="#wines" data-i18n="hero.scroll">Procházet vína</a>
@@ -110,6 +131,11 @@
           <p><strong data-i18n="contact.instagram">Instagram:</strong> <a href="https://www.instagram.com/ivo_winzer/" target="_blank" rel="noopener noreferrer">@ivo_winzer</a></p>
           <p><strong data-i18n="contact.address">Adresa sklípku pro osobní odběr:</strong> <a href="https://maps.app.goo.gl/jKW1DjUBu9TcTeELA" target="_blank" rel="noopener noreferrer" data-i18n="contact.addressValue">Pod Dubňansků horů 1213, 696 11 Mutěnice</a></p>
           <p class="small-note" data-i18n="contact.note">Pokud zákazník zvolí osobní odběr, víno si může vyzvednout právě na této adrese sklípku.</p>
+            <div class="info-box">
+              <strong data-i18n="payment.title">Platba a převzetí bez obav</strong>
+              <span data-i18n="payment.text">Na webu není vyžadována žádná platba předem. Nejčastěji probíhá osobní předání a platba z ruky do ruky. Pokud se domluvíme jinak, pošleme QR kód až individuálně přes WhatsApp.</span>
+            </div>
+            <p class="small-note" data-i18n="shipping.note">Zaslání vína je možné pouze po předchozí domluvě přes WhatsApp nebo telefonicky, a to minimálně po celém kartonu – kvůli ceně dopravy a riziku rozbití lahví.</p>
           <p><strong data-i18n="contact.ico">IČO:</strong> <span data-i18n="contact.icoValue">60260271</span></p>
           <div class="contact-links">
             <a href="mailto:ivo.devaty@email.cz">✉︎ ivo.devaty@email.cz</a>
@@ -120,10 +146,10 @@
           <h3 data-i18n="how.title">Jak probíhá objednávka</h3>
           <ol>
             <li data-i18n="how.1">Zákazník vybere vína do košíku a vyplní objednávkový formulář.</li>
-            <li data-i18n="how.2">Web připraví WhatsApp zprávu, ve které bude uvedeno kolik a jakých vín zákazník objednává, plus adresa pro zaslání nebo informace o osobním odběru ve sklípku.</li>
+            <li data-i18n="how.2">Web připraví WhatsApp zprávu, ve které bude uvedeno kolik a jakých vín zákazník objednává a zvolený způsob osobního převzetí – Liberec nebo sklípek v Mutěnicích.</li>
             <li data-i18n="how.3" data-i18n-html="true">Na telefonu zákazník klikne na tlačítko <strong>Otevřít WhatsApp s objednávkou</strong>. Pokud objednává na počítači, může naskenovat QR kód telefonem.</li>
             <li data-i18n="how.4">V aplikaci WhatsApp se otevře předvyplněná objednávka a zákazník ji jen odešle vinaři.</li>
-            <li data-i18n="how.5">Jakmile vinař objednávku uvidí, potvrdí ji zpět přes WhatsApp a pošle QR kód pro platbu na účet. Tím se objednávka potvrzuje.</li>
+            <li data-i18n="how.5">Jakmile vinař objednávku uvidí, potvrdí ji zpět přes WhatsApp. Platba předem není vyžadována – ideálně proběhne při osobním předání, případně po domluvě QR kódem.</li>
           </ol>
         </div>
       </div>
@@ -210,7 +236,13 @@
             <label><span data-i18n="form.phone">Telefon *</span><input id="fieldPhone" type="tel" required placeholder="+420 777 123 456" /></label>
           </div>
           <label><span data-i18n="form.email">E-mail (volitelně)</span><input id="fieldEmail" type="email" placeholder="jan@example.cz" /></label>
-          <label><span data-i18n="form.address">Doručovací adresa / osobní odběr</span><textarea id="fieldAddress" placeholder="Ulice, město, PSČ – nebo napiš osobní odběr"></textarea></label>
+          <label><span data-i18n="form.pickup">Způsob osobního převzetí *</span>
+            <div class="pickup-options">
+              <label class="pickup-option"><input type="radio" name="pickupPlace" value="Osobní převzetí – Liberec (přesné místo po domluvě)" checked /> <span><strong data-i18n="pickup.liberec">Osobní převzetí – Liberec</strong><small data-i18n="pickup.liberecNote">Přesné místo a čas doladíme přes WhatsApp nebo telefonicky.</small></span></label>
+              <label class="pickup-option"><input type="radio" name="pickupPlace" value="Osobní převzetí – sklípek: Pod Dubňansků horů 1213, 696 11 Mutěnice" /> <span><strong data-i18n="pickup.cellar">Osobní převzetí – sklípek</strong><small data-i18n="pickup.cellarNote">Pod Dubňansků horů 1213, 696 11 Mutěnice.</small></span></label>
+            </div>
+            <input id="fieldAddress" type="hidden" value="Osobní převzetí – Liberec (přesné místo po domluvě)" />
+          </label>
           <label><span data-i18n="form.note">Poznámka</span><textarea id="fieldNote" placeholder="Váš vzkaz..."></textarea></label>
           <label class="checkbox"><input id="ageConfirmOrder" type="checkbox" required /> <span data-i18n="form.age">Potvrzuji, že mi je 18 let nebo více.</span></label>
           <button class="btn primary full" type="submit" data-i18n="form.submit">Připravit WhatsApp objednávku</button>
@@ -264,7 +296,7 @@
           'hero.text': 'Vyberte si z nabídky vín a jednoduše odešlete objednávku přes WhatsApp.',
           'hero.f1': 'Objednávka přes WhatsApp',
           'hero.f2': 'Možnost osobního odběru',
-          'hero.f3': 'QR potvrzení platby od vinaře',
+          'hero.f3': 'Platba až při předání nebo po domluvě QR',
           'hero.scroll': 'Procházet vína',
           'about.eyebrow': 'O vinařství',
           'about.title': 'Malé vinařství s láskou k řemeslu i krajině',
@@ -287,14 +319,20 @@
           'contact.icoValue': '60260271',
           'how.title': 'Jak probíhá objednávka',
           'how.1': 'Zákazník vybere vína do košíku a vyplní objednávkový formulář.',
-          'how.2': 'Web připraví WhatsApp zprávu, ve které bude uvedeno kolik a jakých vín zákazník objednává, plus adresa pro zaslání nebo informace o osobním odběru ve sklípku.',
+          'how.2': 'Web připraví WhatsApp zprávu, ve které bude uvedeno kolik a jakých vín zákazník objednává a zvolený způsob osobního převzetí – Liberec nebo sklípek v Mutěnicích.',
           'how.3': 'Na telefonu zákazník klikne na tlačítko <strong>Otevřít WhatsApp s objednávkou</strong>. Pokud objednává na počítači, může naskenovat QR kód telefonem.',
           'how.4': 'V aplikaci WhatsApp se otevře předvyplněná objednávka a zákazník ji jen odešle vinaři.',
-          'how.5': 'Jakmile vinař objednávku uvidí, potvrdí ji zpět přes WhatsApp a pošle QR kód pro platbu na účet. Tím se objednávka potvrzuje.',
+          'how.5': 'Jakmile vinař objednávku uvidí, potvrdí ji zpět přes WhatsApp. Platba předem není vyžadována – ideálně proběhne při osobním předání, případně po domluvě QR kódem.',
           'footer.text': 'Objednávky přes WhatsApp a osobní odběr ve sklípku.',
           'footer.instagram': 'Instagram',
           'footer.email': 'E-mail',
           'lang.label': 'Jazyk:',
+        'trust.noPrepay': 'Bez platby předem',
+        'trust.cash': 'Ideálně z ruky do ruky při předání',
+        'trust.shipping': 'Zaslání jen po domluvě a minimálně celý karton',
+        'payment.title': 'Platba a převzetí bez obav',
+        'payment.text': 'Na webu není vyžadována žádná platba předem. Nejčastěji probíhá osobní předání a platba z ruky do ruky. Pokud se domluvíme jinak, pošleme QR kód až individuálně přes WhatsApp.',
+        'shipping.note': 'Zaslání vína je možné pouze po předchozí domluvě přes WhatsApp nebo telefonicky, a to minimálně po celém kartonu – kvůli ceně dopravy a riziku rozbití lahví.',
           'cart.title': 'Váš košík',
           'cart.empty': 'Košík je prázdný.',
           'cart.total': 'Celkem',
@@ -306,6 +344,11 @@
           'form.phone': 'Telefon *',
           'form.email': 'E-mail (volitelně)',
           'form.address': 'Doručovací adresa / osobní odběr',
+        'form.pickup': 'Způsob osobního převzetí *',
+        'pickup.liberec': 'Osobní převzetí – Liberec',
+        'pickup.liberecNote': 'Přesné místo a čas doladíme přes WhatsApp nebo telefonicky.',
+        'pickup.cellar': 'Osobní převzetí – sklípek',
+        'pickup.cellarNote': 'Pod Dubňansků horů 1213, 696 11 Mutěnice.',
           'form.note': 'Poznámka',
           'form.age': 'Potvrzuji, že mi je 18 let nebo více.',
           'form.submit': 'Připravit WhatsApp objednávku',
@@ -315,7 +358,7 @@
           'confirm.qrTitle': 'Otevřít WhatsApp',
           'confirm.qrText': 'QR kód obsahuje odkaz na WhatsApp chat s Ivo Devátým a připravenou zprávou objednávky.',
           'confirm.open': 'Otevřít WhatsApp s objednávkou',
-          'confirm.finish': 'Hotovo – zavřít'
+          'confirm.finish': 'Hotovo – zavřít',
         
  'poll.eyebrow': 'Anketa',
  'poll.title': 'Co vám chutná nejvíc?',
@@ -359,7 +402,7 @@
           'hero.text': 'Choose from the wine selection and send your order easily via WhatsApp.',
           'hero.f1': 'Order via WhatsApp',
           'hero.f2': 'Personal pickup available',
-          'hero.f3': 'Payment QR confirmation from the winemaker',
+          'hero.f3': 'Payment on handover or by QR after agreement',
           'hero.scroll': 'Browse wines',
           'about.eyebrow': 'About the winery',
           'about.title': 'A small winery with love for craft and landscape',
@@ -382,14 +425,20 @@
           'contact.icoValue': '60260271',
           'how.title': 'How ordering works',
           'how.1': 'The customer adds wines to the cart and fills in the order form.',
-          'how.2': 'The website prepares a WhatsApp message listing the ordered wines, quantities, and either the delivery address or information about personal pickup at the cellar.',
+          'how.2': 'The website prepares a WhatsApp message listing the ordered wines, quantities, and the selected personal pickup option – Liberec or the cellar in Mutěnice.',
           'how.3': 'On a phone, the customer clicks the <strong>Open WhatsApp order</strong> button. On a computer, they can scan the QR code with their phone.',
           'how.4': 'WhatsApp opens with a pre-filled order message that the customer only needs to send to the winemaker.',
-          'how.5': 'Once the winemaker sees the order, he confirms it via WhatsApp and sends a payment QR code. This confirms the order.',
+          'how.5': 'Once the winemaker sees the order, he confirms it via WhatsApp. No upfront payment is required – ideally payment is made on personal handover, or by QR code after individual agreement.',
           'footer.text': 'Orders via WhatsApp and personal pickup at the cellar.',
           'footer.instagram': 'Instagram',
           'footer.email': 'E-mail',
           'lang.label': 'Language:',
+        'trust.noPrepay': 'No upfront payment required',
+        'trust.cash': 'Preferably paid hand to hand on pickup',
+        'trust.shipping': 'Shipping only by agreement and at least one full carton',
+        'payment.title': 'Payment and pickup without worries',
+        'payment.text': 'No upfront payment is required on the website. Most orders are handed over in person and paid directly on pickup. If agreed individually, we can send a payment QR code via WhatsApp.',
+        'shipping.note': 'Wine shipping is possible only after prior agreement via WhatsApp or phone, and only for at least one full carton – due to shipping cost and risk of bottle breakage.',
           'cart.title': 'Your cart',
           'cart.empty': 'Your cart is empty.',
           'cart.total': 'Total',
@@ -401,6 +450,11 @@
           'form.phone': 'Phone *',
           'form.email': 'E-mail (optional)',
           'form.address': 'Delivery address / personal pickup',
+        'form.pickup': 'Personal pickup option *',
+        'pickup.liberec': 'Personal pickup – Liberec',
+        'pickup.liberecNote': 'Exact place and time will be agreed via WhatsApp or phone.',
+        'pickup.cellar': 'Personal pickup – cellar',
+        'pickup.cellarNote': 'Pod Dubňansků horů 1213, 696 11 Mutěnice.',
           'form.note': 'Note',
           'form.age': 'I confirm that I am 18 years old or older.',
           'form.submit': 'Prepare WhatsApp order',
@@ -410,7 +464,7 @@
           'confirm.qrTitle': 'Open WhatsApp',
           'confirm.qrText': 'The QR code contains a link to the WhatsApp chat with Ivo Devátý and a prepared order message.',
           'confirm.open': 'Open WhatsApp order',
-          'confirm.finish': 'Done – close'
+          'confirm.finish': 'Done – close',
         
  'poll.eyebrow': 'Poll',
  'poll.title': 'What do you like the most?',
@@ -454,7 +508,7 @@
           'hero.text': 'Wählen Sie aus dem Weinangebot und senden Sie Ihre Bestellung einfach per WhatsApp.',
           'hero.f1': 'Bestellung per WhatsApp',
           'hero.f2': 'Persönliche Abholung möglich',
-          'hero.f3': 'QR-Zahlungsbestätigung vom Winzer',
+          'hero.f3': 'Zahlung bei Übergabe oder QR nach Absprache',
           'hero.scroll': 'Weine ansehen',
           'about.eyebrow': 'Über das Weingut',
           'about.title': 'Ein kleines Weingut mit Liebe zum Handwerk und zur Landschaft',
@@ -477,14 +531,20 @@
           'contact.icoValue': '60260271',
           'how.title': 'So funktioniert die Bestellung',
           'how.1': 'Der Kunde legt Weine in den Warenkorb und füllt das Bestellformular aus.',
-          'how.2': 'Die Website erstellt eine WhatsApp-Nachricht mit den bestellten Weinen, Mengen und entweder der Lieferadresse oder Informationen zur persönlichen Abholung im Keller.',
+          'how.2': 'Die Website erstellt eine WhatsApp-Nachricht mit den bestellten Weinen, Mengen und der gewählten persönlichen Abholung – Liberec oder der Weinkeller in Mutěnice.',
           'how.3': 'Auf dem Telefon klickt der Kunde auf die Schaltfläche <strong>WhatsApp-Bestellung öffnen</strong>. Am Computer kann er den QR-Code mit dem Telefon scannen.',
           'how.4': 'In WhatsApp öffnet sich eine vorausgefüllte Bestellnachricht, die der Kunde nur noch an den Winzer senden muss.',
-          'how.5': 'Sobald der Winzer die Bestellung sieht, bestätigt er sie per WhatsApp und sendet einen QR-Code zur Zahlung. Damit wird die Bestellung bestätigt.',
+          'how.5': 'Sobald der Winzer die Bestellung sieht, bestätigt er sie per WhatsApp. Eine Vorauszahlung ist nicht erforderlich – idealerweise erfolgt die Zahlung bei persönlicher Übergabe oder nach Absprache per QR-Code.',
           'footer.text': 'Bestellungen per WhatsApp und persönliche Abholung im Weinkeller.',
           'footer.instagram': 'Instagram',
           'footer.email': 'E-Mail',
           'lang.label': 'Sprache:',
+        'trust.noPrepay': 'Keine Vorauszahlung erforderlich',
+        'trust.cash': 'Am besten direkt bei Übergabe bezahlen',
+        'trust.shipping': 'Versand nur nach Absprache und mindestens ein voller Karton',
+        'payment.title': 'Zahlung und Abholung ohne Sorgen',
+        'payment.text': 'Auf der Website ist keine Vorauszahlung erforderlich. Meist erfolgt die persönliche Übergabe mit direkter Zahlung bei Abholung. Falls individuell vereinbart, senden wir einen Zahlungs-QR-Code per WhatsApp.',
+        'shipping.note': 'Weinversand ist nur nach vorheriger Absprache per WhatsApp oder telefonisch möglich, und nur ab einem vollen Karton – wegen Versandkosten und Bruchrisiko.',
           'cart.title': 'Ihr Warenkorb',
           'cart.empty': 'Ihr Warenkorb ist leer.',
           'cart.total': 'Gesamt',
@@ -496,6 +556,11 @@
           'form.phone': 'Telefon *',
           'form.email': 'E-Mail (optional)',
           'form.address': 'Lieferadresse / persönliche Abholung',
+        'form.pickup': 'Option für persönliche Abholung *',
+        'pickup.liberec': 'Persönliche Abholung – Liberec',
+        'pickup.liberecNote': 'Genauer Ort und Zeitpunkt werden per WhatsApp oder telefonisch vereinbart.',
+        'pickup.cellar': 'Persönliche Abholung – Weinkeller',
+        'pickup.cellarNote': 'Pod Dubňansků horů 1213, 696 11 Mutěnice.',
           'form.note': 'Notiz',
           'form.age': 'Ich bestätige, dass ich 18 Jahre oder älter bin.',
           'form.submit': 'WhatsApp-Bestellung vorbereiten',
@@ -505,7 +570,7 @@
           'confirm.qrTitle': 'WhatsApp öffnen',
           'confirm.qrText': 'Der QR-Code enthält einen Link zum WhatsApp-Chat mit Ivo Devátý und einer vorbereiteten Bestellnachricht.',
           'confirm.open': 'WhatsApp-Bestellung öffnen',
-          'confirm.finish': 'Fertig – schließen'
+          'confirm.finish': 'Fertig – schließen',
         
  'poll.eyebrow': 'Umfrage',
  'poll.title': 'Was schmeckt Ihnen am meisten?',
@@ -526,6 +591,7 @@
  'reviews.note': 'Der Link öffnet sich in einem neuen Tab.',}
       };
 
+      window.__vinoTranslations = translations;
       const translatableNodes = document.querySelectorAll('[data-i18n]');
       const langButtons = document.querySelectorAll('.lang-btn');
       const metaDescription = document.querySelector('meta[name="description"]');
@@ -700,6 +766,37 @@
     setBusy(false);
     refresh();
   })();
+  </script>
+
+
+  <script>
+    (function(){
+      function syncPickup(){
+        const hidden = document.getElementById('fieldAddress');
+        const selected = document.querySelector('input[name="pickupPlace"]:checked');
+        if(hidden && selected) hidden.value = selected.value;
+      }
+      document.querySelectorAll('input[name="pickupPlace"]').forEach(r => r.addEventListener('change', syncPickup));
+      syncPickup();
+
+      // Fallback pro základní ovládací tlačítka, kdyby externí app.js nebyl načtený nebo spadl.
+      const cartPanel = document.getElementById('cartPanel');
+      const cartOverlay = document.getElementById('cartOverlay');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const formScreen = document.getElementById('formScreen');
+      const confirmScreen = document.getElementById('confirmScreen');
+      function openCart(){ cartPanel && cartPanel.classList.add('open','active'); cartOverlay && cartOverlay.classList.add('open','active'); }
+      function closeCart(){ cartPanel && cartPanel.classList.remove('open','active'); cartOverlay && cartOverlay.classList.remove('open','active'); }
+      function openOrder(){ closeCart(); modalOverlay && modalOverlay.classList.add('open','active'); formScreen && formScreen.classList.remove('hidden'); confirmScreen && confirmScreen.classList.add('hidden'); }
+      function closeOrder(){ modalOverlay && modalOverlay.classList.remove('open','active'); }
+      document.getElementById('openCartBtn')?.addEventListener('click', openCart);
+      document.getElementById('closeCartBtn')?.addEventListener('click', closeCart);
+      document.getElementById('cartOverlay')?.addEventListener('click', closeCart);
+      document.getElementById('checkoutBtn')?.addEventListener('click', openOrder);
+      document.getElementById('backToCartBtn')?.addEventListener('click', function(){ closeOrder(); openCart(); });
+      document.getElementById('finishOrderBtn')?.addEventListener('click', closeOrder);
+      document.getElementById('modalOverlay')?.addEventListener('click', function(e){ if(e.target === modalOverlay) closeOrder(); });
+    })();
   </script>
 
 </body>
