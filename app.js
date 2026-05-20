@@ -3,8 +3,8 @@ const SETTINGS = {
   whatsappDisplay: '724 366 369',
   hero: 'images/hero.jpg',
   // Sem vlož URL Google Apps Script Web Appu po nasazení.
-  orderApiUrl: 'https://script.google.com/macros/s/AKfycbxf2BKxNqCAMwb2DkC3jAuHZd1O_QY0wVym2uix4xt8i8HgFB4V1K7tymUE49KeDO-_/exec, 
-  wines: [
+  orderApiUrl: 'https://script.google.com/macros/s/AKfycbxf2BKxNqCAMwb2DkC3jAuHZd1O_QY0wVym2uix4xt8i8HgFB4V1K7tymUE49KeDO-_/exec',
+wines: [
     {
       id: 1,
       name: 'Rulandské bílé 2025',
