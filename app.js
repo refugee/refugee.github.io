@@ -3,7 +3,7 @@ const SETTINGS = {
   whatsappDisplay: '724 366 369',
   hero: 'images/hero.jpg',
   // Sem vlož URL Google Apps Script Web Appu po nasazení.
-  orderApiUrl: '',
+  orderApiUrl: 'https://script.google.com/macros/s/AKfycbzSmODMIzENh-PQeZeSxdppiv4htiEWMmw3FBtsvjZXpTEsjJQ18mp_AsnHVGAyEiNh/exec',
   wines: [
     {
       id: 1,
