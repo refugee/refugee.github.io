@@ -1,0 +1,118 @@
+const SETTINGS = {
+  whatsappDigits: '420724366369',
+  whatsappDisplay: '724 366 369',
+  hero: 'images/hero.jpg',
+  emailJs: {
+    publicKey: 'UcazScBvYErhhj6Mp',
+    serviceId: 'service_mcsep8m',
+    templateId: 'template_fzhugwb',
+    ownerEmail: 'ivo.devaty@email.cz',
+    ownerName: 'Vinařství Devátý'
+  },
+  payment: {
+    accountNumber: '78-6041520237/0100',
+    iban: 'CZ0301000000786041520237',
+    currency: 'CZK'
+  },
+  wines: [
+    { id:1, name:'Rulandské bílé 2025', type:'Bílé víno – suché', vintage:'Ročník 2025', desc:'Jemné bílé víno s čistou ovocností, lehkým květinovým nádechem a příjemně kulatým závěrem.', price:145, award:'Tip vinaře', img:'images/wine-1.jpg', i18n:{ en:{name:'Pinot Blanc 2025',type:'White wine – dry',vintage:'Vintage 2025',desc:'A delicate white wine with clean fruitiness, a light floral touch and a pleasantly rounded finish.',award:'Winemaker’s tip'}, de:{name:'Weißburgunder 2025',type:'Weißwein – trocken',vintage:'Jahrgang 2025',desc:'Ein feiner Weißwein mit klarer Fruchtigkeit, leicht floraler Note und angenehm rundem Abgang.',award:'Tipp des Winzers'} } },
+    { id:2, name:'Tramín červený 2025', type:'Bílé víno – polosuché', vintage:'Ročník 2025', desc:'Aromatické víno s tóny růží, koření a zralého ovoce, s jemnou sladší linkou v dochuti.', price:149, award:'Aromatická odrůda', img:'images/wine-2.jpg', i18n:{ en:{name:'Gewürztraminer 2025',type:'White wine – semi-dry',vintage:'Vintage 2025',desc:'An aromatic wine with notes of rose petals, spice and ripe fruit, finished with a gentle touch of sweetness.',award:'Aromatic variety'}, de:{name:'Gewürztraminer 2025',type:'Weißwein – halbtrocken',vintage:'Jahrgang 2025',desc:'Ein aromatischer Wein mit Noten von Rosen, Gewürzen und reifem Obst, mit einer dezent süßlichen Linie im Abgang.',award:'Aromatische Sorte'} } },
+    { id:3, name:'Veltlínské zelené 2025', type:'Bílé víno – suché', vintage:'Ročník 2025', desc:'Svěží a dobře pitelné víno s tóny zeleného jablka, citrusů a lehce kořenitým dozvukem.', price:147, award:'Svěží volba', img:'images/wine-3.jpg', i18n:{ en:{name:'Grüner Veltliner 2025',type:'White wine – dry',vintage:'Vintage 2025',desc:'A fresh and very drinkable wine with notes of green apple, citrus and a lightly spicy finish.',award:'Fresh choice'}, de:{name:'Grüner Veltliner 2025',type:'Weißwein – trocken',vintage:'Jahrgang 2025',desc:'Ein frischer, sehr zugänglicher Wein mit Noten von grünem Apfel, Zitrusfrüchten und leicht würzigem Nachhall.',award:'Frische Wahl'} } },
+    { id:4, name:'Ryzlink vlašský 2025', type:'Bílé víno – suché', vintage:'Ročník 2025', desc:'Lehčí víno s jemnou kyselinkou, citrusovým projevem a čistým minerálním závěrem.', price:145, award:'', img:'images/wine-4.jpg', i18n:{ en:{name:'Welschriesling 2025',type:'White wine – dry',vintage:'Vintage 2025',desc:'A lighter wine with gentle acidity, citrus expression and a clean mineral finish.',award:''}, de:{name:'Welschriesling 2025',type:'Weißwein – trocken',vintage:'Jahrgang 2025',desc:'Ein leichterer Wein mit feiner Säure, zitrischem Ausdruck und klarem mineralischem Abgang.',award:''} } },
+    { id:5, name:'Rosé 2025', type:'Rosé – polosuché', vintage:'Ročník 2025', desc:'Lehké růžové víno s tóny jahod a drobného lesního ovoce, ideální na pohodové pití.', price:150, award:'Lehké rosé', img:'images/wine-5.jpg', i18n:{ en:{name:'Rosé 2025',type:'Rosé – semi-dry',vintage:'Vintage 2025',desc:'A light rosé with notes of strawberries and small forest berries, ideal for relaxed drinking.',award:'Light rosé'}, de:{name:'Rosé 2025',type:'Rosé – halbtrocken',vintage:'Jahrgang 2025',desc:'Ein leichter Rosé mit Noten von Erdbeeren und kleinen Waldbeeren, ideal für unkomplizierten Genuss.',award:'Leichter Rosé'} } }
+  ]
+};
+
+const UI = {
+  cs:{add:'Přidat',emptyCart:'Košík je prázdný.',cartEmptyAlert:'Košík je prázdný.',formMissing:'Vyplň prosím jméno a telefon.',ageAlert:'Potvrď prosím věk 18+.',currency:'Kč',perBottle:'/ 0,75 l',perPiece:'/ ks',orderTotal:'Celkem',inCart:function(q){return 'V košíku ('+q+')';},message:{title:'Nová objednávka z webu',name:'Jméno',phone:'Telefon',email:'E-mail',emailMissing:'neuveden',address:'Adresa / převzetí',pickup:'osobní odběr',order:'Objednávka',total:'Celkem',note:'Poznámka'}},
+  en:{add:'Add',emptyCart:'Your cart is empty.',cartEmptyAlert:'Your cart is empty.',formMissing:'Please fill in your name and phone number.',ageAlert:'Please confirm that you are 18+.',currency:'CZK',perBottle:'/ 0.75 l',perPiece:'/ pc',orderTotal:'Total',inCart:function(q){return 'In cart ('+q+')';},message:{title:'New website order',name:'Name',phone:'Phone',email:'E-mail',emailMissing:'not provided',address:'Address / pickup',pickup:'personal pickup',order:'Order',total:'Total',note:'Note'}},
+  de:{add:'Hinzufügen',emptyCart:'Ihr Warenkorb ist leer.',cartEmptyAlert:'Ihr Warenkorb ist leer.',formMissing:'Bitte geben Sie Name und Telefon ein.',ageAlert:'Bitte bestätigen Sie, dass Sie 18+ sind.',currency:'CZK',perBottle:'/ 0,75 l',perPiece:'/ Stk',orderTotal:'Gesamt',inCart:function(q){return 'Im Warenkorb ('+q+')';},message:{title:'Neue Web-Bestellung',name:'Name',phone:'Telefon',email:'E-Mail',emailMissing:'nicht angegeben',address:'Adresse / Abholung',pickup:'persönliche Abholung',order:'Bestellung',total:'Gesamt',note:'Notiz'}}
+};
+
+const PAYMENT_COPY = {
+  cs:{cash:'Platba při předání',qr:'QR platba předem na bankovní účet',cashCustomer:'Platba proběhne při osobním předání.',qrCustomer:'Zvolili jste QR platbu předem. Prosím uhraďte částku pomocí QR kódu nebo bankovním převodem.',cashOwner:'PLATBA: PŘI PŘEDÁNÍ',qrOwner:'PLATBA: QR KÓD / PŘEVOD NA ÚČET – ZKONTROLOVAT PŘIPSÁNÍ PLATBY',account:'Číslo účtu',iban:'IBAN',vs:'Variabilní symbol',contact:'Kontakt na vinaře'},
+  en:{cash:'Payment on pickup',qr:'QR payment in advance to bank account',cashCustomer:'Payment will be made on personal pickup.',qrCustomer:'You selected QR payment in advance. Please pay using the QR code or by bank transfer.',cashOwner:'PAYMENT: ON PICKUP',qrOwner:'PAYMENT: QR CODE / BANK TRANSFER – CHECK PAYMENT RECEIPT',account:'Bank account',iban:'IBAN',vs:'Variable symbol',contact:'Winemaker contact'},
+  de:{cash:'Zahlung bei Abholung',qr:'QR-Zahlung im Voraus auf das Bankkonto',cashCustomer:'Die Zahlung erfolgt bei persönlicher Abholung.',qrCustomer:'Sie haben QR-Zahlung im Voraus gewählt. Bitte bezahlen Sie per QR-Code oder Banküberweisung.',cashOwner:'ZAHLUNG: BEI ABHOLUNG',qrOwner:'ZAHLUNG: QR-CODE / BANKÜBERWEISUNG – ZAHLUNGSEINGANG PRÜFEN',account:'Bankkonto',iban:'IBAN',vs:'Variables Symbol',contact:'Kontakt zum Winzer'}
+};
+
+let cart = {};
+let currentLanguage = localStorage.getItem('vinoLanguage') || window.vinoLocale || 'cs';
+let lastOrderPayload = null;
+let emailJsInitialized = false;
+function el(id){ return document.getElementById(id); }
+function t(){ return UI[currentLanguage] || UI.cs; }
+function paymentCopyFor(lang){ return PAYMENT_COPY[lang || currentLanguage] || PAYMENT_COPY.cs; }
+function paymentMethodLabel(method, lang){ return paymentCopyFor(lang || currentLanguage)[method === 'qr' ? 'qr' : 'cash']; }
+function money(value){ return Number(value).toLocaleString('cs-CZ') + ' ' + t().currency; }
+function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function wineText(wine, field){ if(!wine) return ''; if(wine.i18n && wine.i18n[currentLanguage] && wine.i18n[currentLanguage][field] !== undefined) return wine.i18n[currentLanguage][field]; return wine[field] || ''; }
+function selectedPickup(){ const s=document.querySelector('input[name="pickupPlace"]:checked'); const h=el('fieldAddress'); return s ? s.value : (h ? h.value : ''); }
+function selectedPayment(){ const s=document.querySelector('input[name="paymentMethod"]:checked'); return s ? s.value : 'cash'; }
+function orderRef(){ return String(Date.now()).slice(-10); }
+function spaydValue(v){ return encodeURIComponent(String(v || '').replace(/\*/g,' ')).replace(/%20/g,'+').toUpperCase(); }
+function buildSpayd(payload){ const vs=payload.paymentVariableSymbol || payload.orderReference || orderRef(); return 'SPD*1.0*ACC:'+SETTINGS.payment.iban+'*AM:'+Number(payload.total||0).toFixed(2)+'*CC:CZK*X-VS:'+vs+'*MSG:'+spaydValue('OBJEDNAVKA '+vs+' VINARSTVI DEVATY'); }
+
+function initStatic(){ const hero=el('heroBg'); if(hero){ hero.style.backgroundImage="url('"+SETTINGS.hero+"')"; setTimeout(function(){hero.classList.add('loaded');},100); } }
+function renderWines(){ const grid=el('winesGrid'); if(!grid) return; const copy=t(); grid.innerHTML = SETTINGS.wines.map(function(w){ const qty=cart[w.id]||0; const award=wineText(w,'award'); return '<article class="wine-card"><div class="wine-image"><img src="'+esc(w.img)+'" alt="'+esc(wineText(w,'name'))+'"><span class="wine-type">'+esc(wineText(w,'type'))+'</span></div><div class="wine-body"><div class="wine-name">'+esc(wineText(w,'name'))+'</div><div class="wine-vintage">'+esc(wineText(w,'vintage'))+'</div><div class="wine-desc">'+esc(wineText(w,'desc'))+'</div>'+(award?'<div class="wine-tag">'+esc(award)+'</div>':'')+'</div><div class="wine-footer"><div class="wine-price">'+money(w.price)+' <span>'+copy.perBottle+'</span></div><button id="btn-'+w.id+'" class="btn primary" type="button" onclick="addToCart('+w.id+')">'+(qty?copy.inCart(qty):copy.add)+'</button></div></article>'; }).join(''); }
+function addToCart(id){ cart[id]=(cart[id]||0)+1; updateCart(); renderWines(); }
+function changeQty(id,delta){ cart[id]=(cart[id]||0)+delta; if(cart[id]<=0) delete cart[id]; updateCart(); renderWines(); }
+function removeFromCart(id){ delete cart[id]; updateCart(); renderWines(); }
+window.addToCart=addToCart; window.changeQty=changeQty; window.removeFromCart=removeFromCart;
+function cartCount(){ return Object.values(cart).reduce(function(a,b){return a+b;},0); }
+function cartTotal(){ return Object.keys(cart).reduce(function(sum,id){ const w=SETTINGS.wines.find(function(x){return x.id===Number(id);}); return sum+(w?w.price*cart[id]:0); },0); }
+function updateCart(){ if(el('cartCount')) el('cartCount').textContent=cartCount(); if(el('cartTotal')) el('cartTotal').textContent=money(cartTotal()); const wrap=el('cartItems'); if(wrap){ wrap.innerHTML=''; if(!cartCount()){ wrap.innerHTML='<div id="cartEmpty" class="cart-empty">'+t().emptyCart+'</div>'; } else { Object.keys(cart).forEach(function(id){ const w=SETTINGS.wines.find(function(x){return x.id===Number(id);}); if(!w) return; const qty=cart[id]; const div=document.createElement('div'); div.className='cart-item'; div.innerHTML='<div class="cart-item-thumb"><img src="'+esc(w.img)+'" alt="'+esc(wineText(w,'name'))+'"></div><div class="cart-item-info"><div class="cart-item-name">'+esc(wineText(w,'name'))+'</div><div class="cart-item-price">'+money(w.price)+' '+t().perPiece+'</div></div><div class="qty"><button class="qty-btn" type="button" onclick="changeQty('+w.id+',-1)">−</button><strong>'+qty+'</strong><button class="qty-btn" type="button" onclick="changeQty('+w.id+',1)">+</button></div><button class="remove-btn" type="button" onclick="removeFromCart('+w.id+')">×</button>'; wrap.appendChild(div); }); } } if(el('formScreen') && !el('formScreen').classList.contains('hidden')) renderOrderSummary(); }
+function renderOrderSummary(){ const lines=el('orderLines'); if(!lines) return; lines.innerHTML=''; Object.keys(cart).forEach(function(id){ const w=SETTINGS.wines.find(function(x){return x.id===Number(id);}); if(!w) return; const qty=cart[id]; const row=document.createElement('div'); row.className='order-line'; row.innerHTML='<span>'+esc(wineText(w,'name'))+' × '+qty+'</span><strong>'+money(w.price*qty)+'</strong>'; lines.appendChild(row); }); const total=document.createElement('div'); total.className='order-line total'; total.innerHTML='<span>'+t().orderTotal+'</span><strong>'+money(cartTotal())+'</strong>'; lines.appendChild(total); }
+function buildMessage(name,phone,email,address,note){ const c=t().message; const items=Object.keys(cart).map(function(id){ const w=SETTINGS.wines.find(function(x){return x.id===Number(id);}); return '- '+wineText(w,'name')+' × '+cart[id]+' ks = '+money(w.price*cart[id]); }).join('\n'); return [c.title,'',c.name+': '+name,c.phone+': '+phone,c.email+': '+(email||c.emailMissing),c.address+': '+(address||c.pickup),'',c.order+':',items,'',c.total+': '+money(cartTotal()),note?c.note+': '+note:null].filter(Boolean).join('\n'); }
+function buildPayload(name,phone,email,address,note){ const items=Object.keys(cart).map(function(id){ const w=SETTINGS.wines.find(function(x){return x.id===Number(id);}); return {id:w.id,name:wineText(w,'name'),originalName:w.name,quantity:cart[id],unitPrice:w.price,subtotal:w.price*cart[id]}; }); const pm=selectedPayment(); const ref=orderRef(); const payload={language:currentLanguage,name:name,phone:phone,email:email,address:address,note:note,items:items,total:cartTotal(),currency:t().currency,message:buildMessage(name,phone,email,address,note),paymentMethod:pm,paymentLabel:paymentMethodLabel(pm,currentLanguage),paymentAccount:SETTINGS.payment.accountNumber,paymentIban:SETTINGS.payment.iban,paymentVariableSymbol:ref,orderReference:ref,source:window.location.href,createdAt:new Date().toISOString()}; payload.paymentQrData=pm==='qr'?buildSpayd(payload):''; return payload; }
+function plainItems(payload){ return (payload.items||[]).map(function(i){ return '- '+i.name+' × '+i.quantity+' ks = '+Number(i.subtotal).toLocaleString('cs-CZ')+' '+(payload.currency||'Kč'); }).join('\n'); }
+function paymentInfo(payload,audience){ const pc=paymentCopyFor(payload.language||'cs'); const qr=payload.paymentMethod==='qr'; const head=audience==='owner'?(qr?pc.qrOwner:pc.cashOwner):(paymentMethodLabel(payload.paymentMethod,payload.language)+' – '+(qr?pc.qrCustomer:pc.cashCustomer)); const lines=['==================================================',head,'==================================================']; if(qr){ lines.push(pc.account+': '+payload.paymentAccount,pc.iban+': '+payload.paymentIban,pc.vs+': '+payload.paymentVariableSymbol,'Částka / Amount: '+Number(payload.total).toLocaleString('cs-CZ')+' '+(payload.currency||'Kč')); } lines.push(pc.contact+': ivo.devaty@email.cz, +420 724 366 369'); return lines.join('\n'); }
+function ownerEmail(payload){ return ['Nová objednávka z webu – Vinařství Devátý','', 'Jméno: '+payload.name,'Telefon: '+payload.phone,'E-mail: '+(payload.email||'neuveden'),'Převzetí: '+(payload.address||'neuvedeno'),'',paymentInfo(payload,'owner'),'', 'Objednávka:',plainItems(payload),'','Celkem: '+Number(payload.total).toLocaleString('cs-CZ')+' '+(payload.currency||'Kč'),payload.note?'Poznámka: '+payload.note:null,'','Zdroj: '+payload.source].filter(Boolean).join('\n'); }
+function customerSubject(lang){ if(lang==='en') return 'Order confirmation – Vinařství Devátý'; if(lang==='de') return 'Bestellbestätigung – Vinařství Devátý'; return 'Potvrzení objednávky – Vinařství Devátý'; }
+function customerEmail(payload){ return ['Dobrý den,','','děkujeme za Vaši objednávku z webu Vinařství Devátý.','Brzy se ozveme kvůli potvrzení převzetí.','','Objednávka:',plainItems(payload),'','Převzetí: '+(payload.address||''),'Celkem: '+Number(payload.total).toLocaleString('cs-CZ')+' '+(payload.currency||'Kč'),payload.note?'Poznámka: '+payload.note:null,'',paymentInfo(payload,'customer'),'','S pozdravem\nVinařství Devátý'].filter(Boolean).join('\n'); }
+function ensureEmail(){ if(!window.emailjs) throw new Error('EmailJS knihovna není načtená.'); if(!emailJsInitialized){ emailjs.init({publicKey:SETTINGS.emailJs.publicKey,blockHeadless:true,limitRate:{id:'vino-order-form',throttle:10000}}); emailJsInitialized=true; } }
+async function sendEmail(opts){ const cfg=SETTINGS.emailJs; return emailjs.send(cfg.serviceId,cfg.templateId,{to_email:opts.toEmail,reply_to:opts.replyTo||cfg.ownerEmail,from_name:cfg.ownerName,subject:opts.subject,message:opts.message,customer_name:opts.payload.name,customer_phone:opts.payload.phone,customer_email:opts.payload.email||'',pickup:opts.payload.address||'',order_items:plainItems(opts.payload),order_total:Number(opts.payload.total).toLocaleString('cs-CZ')+' '+(opts.payload.currency||'Kč'),payment_method:paymentMethodLabel(opts.payload.paymentMethod,opts.payload.language),payment_account:opts.payload.paymentAccount||'',payment_iban:opts.payload.paymentIban||'',payment_variable_symbol:opts.payload.paymentVariableSymbol||'',payment_qr_data:opts.payload.paymentQrData||'',note:opts.payload.note||'',language:opts.payload.language||'cs',source:opts.payload.source||''}); }
+async function sendOrder(payload){ ensureEmail(); const cfg=SETTINGS.emailJs; await sendEmail({toEmail:cfg.ownerEmail,replyTo:payload.email||cfg.ownerEmail,subject:'Nová objednávka vína – '+payload.name+' – '+Number(payload.total).toLocaleString('cs-CZ')+' '+(payload.currency||'Kč'),message:ownerEmail(payload),payload:payload}); if(payload.email) await sendEmail({toEmail:payload.email,replyTo:cfg.ownerEmail,subject:customerSubject(payload.language),message:customerEmail(payload),payload:payload}); }
+function openCart(){ if(el('cartOverlay')) el('cartOverlay').classList.add('open'); if(el('cartPanel')) el('cartPanel').classList.add('open'); }
+function closeCart(){ if(el('cartOverlay')) el('cartOverlay').classList.remove('open'); if(el('cartPanel')) el('cartPanel').classList.remove('open'); }
+function openCheckout(){ if(!cartCount()){ alert(t().cartEmptyAlert); return; } closeCart(); renderOrderSummary(); if(el('formScreen')) el('formScreen').classList.remove('hidden'); if(el('confirmScreen')) el('confirmScreen').classList.add('hidden'); if(el('modalOverlay')) el('modalOverlay').classList.add('open'); }
+function closeModal(){ if(el('modalOverlay')) el('modalOverlay').classList.remove('open'); }
+function renderPaymentQr(payload){ const qr=el('qrcode'); if(!qr) return; qr.innerHTML=''; if(payload.paymentMethod==='qr' && payload.paymentQrData && window.QRCode){ new QRCode(qr,{text:payload.paymentQrData,width:220,height:220,correctLevel:QRCode.CorrectLevel.M}); } }
+function refreshConfirm(){ if(!lastOrderPayload) return; const pc=paymentCopyFor(lastOrderPayload.language); const qr=lastOrderPayload.paymentMethod==='qr'; const paymentHtml=qr?'<div style="margin:1rem 0;padding:1rem;border:2px solid #5c1a2e;border-radius:12px;background:#fff7e6;color:#3d0f1e"><strong>'+esc(paymentMethodLabel('qr',lastOrderPayload.language))+'</strong><br>'+esc(pc.qrCustomer)+'<br><br><strong>'+esc(pc.account)+':</strong> '+esc(lastOrderPayload.paymentAccount)+'<br><strong>'+esc(pc.iban)+':</strong> '+esc(lastOrderPayload.paymentIban)+'<br><strong>'+esc(pc.vs)+':</strong> '+esc(lastOrderPayload.paymentVariableSymbol)+'<br><strong>Částka / Amount:</strong> '+esc(Number(lastOrderPayload.total).toLocaleString('cs-CZ'))+' '+esc(lastOrderPayload.currency||'Kč')+'</div>':'<div style="margin:1rem 0;padding:1rem;border:1px solid rgba(200,169,110,.45);border-radius:12px;background:#fff;color:#3d0f1e"><strong>'+esc(paymentMethodLabel('cash',lastOrderPayload.language))+'</strong><br>'+esc(pc.cashCustomer)+'</div>'; if(el('waDetail')) el('waDetail').innerHTML=paymentHtml+'<strong>Detail objednávky</strong><br><pre style="white-space:pre-wrap;text-align:left;font:inherit;margin:.8rem 0 0;color:inherit">'+esc(lastOrderPayload.message)+'</pre><div style="margin-top:1rem">Kontakt: '+SETTINGS.whatsappDisplay+' / ivo.devaty@email.cz</div>'; renderPaymentQr(lastOrderPayload); if(el('whatsAppOrderBtn')){ const whatsappUrl='https://wa.me/'+SETTINGS.whatsappDigits+'?text='+encodeURIComponent(lastOrderPayload.message); el('whatsAppOrderBtn').classList.remove('hidden'); el('whatsAppOrderBtn').href=whatsappUrl; } }
+async function submitOrder(event){
+  event.preventDefault();
+  const name=el('fieldName').value.trim();
+  const phone=el('fieldPhone').value.trim();
+  const email=el('fieldEmail').value.trim();
+  const address=selectedPickup();
+  const note=el('fieldNote').value.trim();
+  if(!name || !phone){ alert(t().formMissing); return; }
+  if(el('ageConfirmOrder') && !el('ageConfirmOrder').checked){ alert(t().ageAlert); return; }
+  const btn=el('checkoutForm').querySelector('button[type="submit"]');
+  const old=btn.textContent;
+  btn.disabled=true;
+  btn.textContent=currentLanguage==='de'?'WhatsApp wird geöffnet…':(currentLanguage==='en'?'Opening WhatsApp…':'Otevírám WhatsApp…');
+  const payload=buildPayload(name,phone,email,address,note);
+  try{
+    const whatsappUrl='https://wa.me/'+SETTINGS.whatsappDigits+'?text='+encodeURIComponent(payload.message);
+    lastOrderPayload=payload;
+    refreshConfirm();
+    if(el('whatsAppOrderBtn')){
+      el('whatsAppOrderBtn').classList.remove('hidden');
+      el('whatsAppOrderBtn').href=whatsappUrl;
+    }
+    if(el('formScreen')) el('formScreen').classList.add('hidden');
+    if(el('confirmScreen')) el('confirmScreen').classList.remove('hidden');
+    window.location.href=whatsappUrl;
+  } catch(e){
+    console.error(e);
+    alert(e.message || 'WhatsApp se nepodařilo otevřít.');
+  } finally {
+    btn.disabled=false;
+    btn.textContent=old;
+  }
+}
+function finishOrder(){ cart={}; lastOrderPayload=null; updateCart(); renderWines(); closeModal(); if(el('checkoutForm')) el('checkoutForm').reset(); }
+function setupAge(){ if(localStorage.getItem('wineAgeConfirmed')!=='yes' && el('ageGate')) el('ageGate').classList.add('show'); if(el('confirmAgeBtn')) el('confirmAgeBtn').addEventListener('click',function(){ localStorage.setItem('wineAgeConfirmed','yes'); if(el('ageGate')) el('ageGate').classList.remove('show'); }); }
+function bind(){ window.addEventListener('scroll',function(){ if(el('mainHeader')) el('mainHeader').classList.toggle('scrolled',window.scrollY>40); }); if(el('openCartBtn')) el('openCartBtn').addEventListener('click',openCart); if(el('closeCartBtn')) el('closeCartBtn').addEventListener('click',closeCart); if(el('cartOverlay')) el('cartOverlay').addEventListener('click',closeCart); if(el('checkoutBtn')) el('checkoutBtn').addEventListener('click',openCheckout); if(el('backToCartBtn')) el('backToCartBtn').addEventListener('click',closeModal); if(el('finishOrderBtn')) el('finishOrderBtn').addEventListener('click',finishOrder); if(el('checkoutForm')) el('checkoutForm').addEventListener('submit',submitOrder); window.addEventListener('vino-language-change',function(e){ currentLanguage=(e.detail&&e.detail.lang)||localStorage.getItem('vinoLanguage')||'cs'; renderWines(); updateCart(); }); }
+function start(){ initStatic(); renderWines(); updateCart(); setupAge(); bind(); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();

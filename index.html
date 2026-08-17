@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Vinařství Devátý</title>
+  <meta name="description" content="Vinařství Devátý – online objednávky vín a osobní odběr ve sklípku nebo v Liberci." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* --- Poll + reviews --- */
+    .poll-wrap{display:grid;grid-template-columns:1.4fr .9fr;gap:18px;align-items:start}
+    @media (max-width: 860px){.poll-wrap{grid-template-columns:1fr}}
+    .poll-card{background:rgba(255,255,255,.9);border:1px solid rgba(15,23,42,.08);border-radius:16px;padding:18px;box-shadow:0 8px 30px rgba(15,23,42,.06)}
+    .poll-lead{margin:.25rem 0 1rem;color:rgba(15,23,42,.75)}
+    .poll-h3{margin:.25rem 0 .25rem}
+    .poll-options{display:flex;flex-wrap:wrap;gap:10px}
+    .poll-btn{border:1px solid rgba(15,23,42,.14);background:#fff;border-radius:999px;padding:10px 14px;font-weight:600;cursor:pointer;transition:transform .05s ease, box-shadow .2s ease}
+    .poll-btn:hover{box-shadow:0 8px 18px rgba(15,23,42,.08)}
+    .poll-btn:active{transform:translateY(1px)}
+    .poll-btn[disabled]{opacity:.6;cursor:not-allowed}
+    .poll-meta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:12px}
+    .poll-thanks{font-weight:600}
+    .poll-results{margin-top:14px;display:grid;gap:10px}
+    .poll-row{display:grid;grid-template-columns:110px 1fr 46px;gap:10px;align-items:center}
+    .poll-label{font-weight:600}
+    .poll-bar{height:10px;background:rgba(15,23,42,.08);border-radius:999px;overflow:hidden}
+    .poll-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#22c55e);width:0%}
+    .poll-num{font-variant-numeric:tabular-nums;text-align:right;color:rgba(15,23,42,.7)}
+
+    /* --- Trust / pickup notices --- */
+    .trust-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .trust-pill{background:rgba(255,255,255,.92);color:#1f2937;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:10px 14px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+    .info-box{background:rgba(255,255,255,.92);border:1px solid rgba(15,23,42,.09);border-left:5px solid #7c3aed;border-radius:16px;padding:16px 18px;margin:16px 0;box-shadow:0 8px 28px rgba(15,23,42,.06)}
+    .info-box strong{display:block;margin-bottom:6px}
+    .pickup-options{display:grid;gap:10px;margin-top:8px}
+    .pickup-option{display:flex;gap:10px;align-items:flex-start;border:1px solid rgba(15,23,42,.12);border-radius:14px;padding:12px;background:#fff;cursor:pointer}
+    .pickup-option input{margin-top:3px}
+    .pickup-option span{display:block}
+    .pickup-option small{display:block;color:rgba(15,23,42,.65);margin-top:3px;line-height:1.35}
+
+    /* Fallback visibility classes for cart/order buttons */
+    .overlay.open,.overlay.active,.modal-overlay.open,.modal-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
+    .cart-panel.open,.cart-panel.active{transform:translateX(0);visibility:visible}
+
+
+  /* --- Quick QR payment --- */
+  .quick-pay-section{padding-top:10px;padding-bottom:26px}
+  .quick-pay-card{align-items:center}
+  .quick-pay-card h2{font-size:1.8rem;margin-bottom:.4rem}
+  .quick-pay-action{display:flex;align-items:center;justify-content:flex-end}
+  .quick-pay-modal-card{max-width:760px}
+  .quick-pay-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
+  .quick-pay-rows{display:grid;gap:10px;margin:14px 0}
+  .quick-pay-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:#fff;border:1px solid rgba(200,169,110,.22);border-radius:12px;padding:12px}
+  .quick-pay-row-name{font-family:var(--font-display);font-size:1.14rem;color:var(--burgundy-dk)}
+  .quick-pay-row-price{font-size:.86rem;color:var(--warm-gray)}
+  .quick-pay-qty{display:flex;align-items:center;gap:10px}
+  .quick-pay-qty strong{min-width:24px;text-align:center}
+  .quick-pay-total{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid rgba(200,169,110,.28);border-radius:12px;padding:14px 16px;margin:12px 0;font-family:var(--font-display);font-size:1.45rem;color:var(--burgundy)}
+  .quick-pay-result{margin-top:14px}
+  .quick-pay-qr-box{margin-bottom:0}
+  #quickPayQrCode{display:flex;justify-content:center;margin:12px 0}
+  @media (max-width:700px){.quick-pay-row{grid-template-columns:1fr}.quick-pay-action{justify-content:stretch}.quick-pay-head{align-items:center}.quick-pay-card{gap:12px}}
+
+  </style>
+
+</head>
+<body>
+  <div id="ageGate" class="age-gate">
+    <div class="age-card">
+      <div class="eyebrow">18+</div>
+      <h2 data-i18n="age.title">Vstup pouze pro osoby starší 18 let</h2>
+      <p data-i18n="age.text">Tyto stránky jsou určeny výhradně návštěvníkům starším 18 let. Alkohol neprodáváme osobám mladším 18 let.</p>
+      <div class="row-actions">
+        <button class="btn primary" id="confirmAgeBtn" data-i18n="age.confirm">Je mi 18 a více</button>
+        <a class="btn secondary" href="https://www.google.com" data-i18n="age.leave">Opustit stránku</a>
+      </div>
+    </div>
+  </div>
+
+  <header id="mainHeader">
+    <a href="#hero" class="brand">
+      <span class="brand-name">Vinařství Devátý</span>
+      <span class="brand-sub" data-i18n="brand.sub">Pod Dubňanskou horou</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about" data-i18n="nav.about">O nás</a>
+      <a href="#wines" data-i18n="nav.wines">Víno</a>
+      <a href="#contact" data-i18n="nav.contact">Kontakt</a>
+    </nav>
+    <button id="openCartBtn" class="cart-btn"><span class="cart-label" data-i18n="cart.button">Košík</span> <span id="cartCount">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <span class="hero-badge" data-i18n="hero.badge">Malé vinařství · jižní Morava · poctivé řemeslo</span>
+        <h1 data-i18n="hero.title">Poctivá vína z vinohradů pod Dubňanskou horou</h1>
+        <p data-i18n="hero.text">Vyberte si z nabídky vín a jednoduše odešlete nezávaznou objednávku přes formulář.</p>
+        <div class="hero-features">
+          <span data-i18n="hero.f1">Objednávka přes formulář</span>
+          <span data-i18n="hero.f2">Možnost osobního odběru</span>
+          <span data-i18n="hero.f3">Platba až při předání nebo po domluvě QR</span>
+        </div>
+        <div class="trust-strip" aria-label="Informace k platbě a převzetí">
+          <span class="trust-pill" data-i18n="trust.noPrepay">Bez platby předem</span>
+          <span class="trust-pill" data-i18n="trust.cash">Ideálně z ruky do ruky při předání</span>
+          <span class="trust-pill" data-i18n="trust.shipping">Zaslání jen po domluvě a minimálně celý karton</span>
+          <span class="trust-pill" data-i18n="trust.baggy">Možnost objednání také do 2l Baggy</span>
+        </div>
+      </div>
+      <a class="hero-scroll" href="#wines" data-i18n="hero.scroll">Procházet vína</a>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-image"><img src="images/about.jpg" alt="Atmosféra vinařství" id="aboutImage" /></div>
+      <div class="about-text">
+        <div class="eyebrow" data-i18n="about.eyebrow">O vinařství</div>
+        <h2 data-i18n="about.title">Malé vinařství s láskou k řemeslu i krajině</h2>
+        <p data-i18n="about.p1">Jsme malé vinařství pod Dubňanskou horou nedaleko Mutěnic, založené lidmi ze severu Čech, kteří si zamilovali moravské vinohrady i poctivé řemeslo.</p>
+        <p data-i18n="about.p2">Víno tvoříme s láskou, respektem k přírodě a inspirací burgundským přístupem, který staví na čistotě vína, charakteru hroznů a šetrné práci ve sklepě s minimem zásahů.</p>
+        <p data-i18n="about.p3">Naše vína si postupně našla své příznivce a podařilo se jim získat ocenění i v lokálních soutěžích.</p>
+        <p data-i18n="about.p4">Naším cílem je přenést do každé lahve slunce jižní Moravy, čistý projev odrůdy a radost z dobře odvedené práce.</p>
+      </div>
+    </section>
+
+    <section class="section" id="wines">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow dark" data-i18n="wines.eyebrow">Nabídka</div>
+          <h2 data-i18n="wines.title">Nabídka vín</h2>
+        </div>
+        <div class="line"></div>
+      </div>
+      <div id="winesGrid" class="wines-grid"></div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="contact-card">
+        <div>
+          <div class="eyebrow dark" data-i18n="contact.eyebrow">Kontakt</div>
+          <h2 data-i18n="contact.title">Objednávky a osobní odběr</h2>
+          <p><strong data-i18n="contact.winemaker">Vinař:</strong> Ivo Devátý</p>
+          <p><strong data-i18n="contact.phone">Telefon / WhatsApp:</strong> <a href="https://wa.me/420724366369">724 366 369</a></p>
+          <p><strong data-i18n="contact.email">E-mail:</strong> <a href="mailto:ivo.devaty@email.cz">ivo.devaty@email.cz</a></p>
+          <p><strong data-i18n="contact.instagram">Instagram:</strong> <a href="https://www.instagram.com/ivo_winzer/" target="_blank" rel="noopener noreferrer">@ivo_winzer</a></p>
+          <p><strong data-i18n="contact.address">Adresa sklípku pro osobní odběr:</strong> <a href="https://maps.app.goo.gl/jKW1DjUBu9TcTeELA" target="_blank" rel="noopener noreferrer" data-i18n="contact.addressValue">Pod Dubňansků horů 1213, 696 11 Mutěnice</a></p>
+          <p class="small-note" data-i18n="contact.note">Pokud zákazník zvolí osobní odběr, víno si může vyzvednout právě na této adrese sklípku.</p>
+            <div class="info-box">
+              <strong data-i18n="payment.title">Platba a převzetí bez obav</strong>
+              <span data-i18n="payment.text">Na webu není vyžadována žádná platba předem. Nejčastěji probíhá osobní předání a platba z ruky do ruky. Pokud se domluvíme jinak, pošleme QR kód až individuálně přes WhatsApp.</span>
+            </div>
+            <p class="small-note" data-i18n="shipping.note">Zaslání vína je možné pouze po předchozí domluvě přes WhatsApp nebo telefonicky, a to minimálně po celém kartonu – kvůli ceně dopravy a riziku rozbití lahví.</p>
+            <div class="info-box">
+              <strong data-i18n="baggy.title">Také v 2l balení Baggy</strong>
+              <span data-i18n="baggy.text">Vybraná vína lze po domluvě objednat také v praktickém 2l balení Baggy místo klasických lahví 0,75 l. Zájem prosím uveďte do poznámky v objednávce.</span>
+            </div>
+          <p><strong data-i18n="contact.ico">IČO:</strong> <span data-i18n="contact.icoValue">60260271</span></p>
+          <div class="contact-links">
+            <a href="mailto:ivo.devaty@email.cz">✉︎ ivo.devaty@email.cz</a>
+            <a href="https://www.instagram.com/ivo_winzer/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          </div>
+        </div>
+        <div class="contact-note">
+          <h3 data-i18n="how.title">Jak probíhá objednávka</h3>
+          <ol>
+            <li data-i18n="how.1">Zákazník vybere vína do košíku a vyplní objednávkový formulář.</li>
+            <li data-i18n="how.2">Po vyplnění formuláře se otevře WhatsApp s připravenou objednávkou pro vinaře.</li>
+            <li data-i18n="how.3" data-i18n-html="true">Zákazník zkontroluje připravenou zprávu a odešle ji vinaři přes WhatsApp.</li>
+            <li data-i18n="how.4">Vinař objednávku potvrdí a domluví konkrétní čas a místo převzetí.</li>
+            <li data-i18n="how.5">Platba předem není vyžadována – ideálně proběhne při osobním předání, případně po domluvě QR kódem.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  
+  <section class="section" id="taste-poll">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow dark" data-i18n="poll.eyebrow">Anketa</div>
+        <h2 data-i18n="poll.title">Co vám chutná nejvíc?</h2>
+      </div>
+      <div class="line"></div>
+    </div>
+
+    <div class="poll-wrap">
+      <div class="poll-card">
+        <p class="poll-lead" data-i18n="poll.lead">Klikněte a uvidíte výsledky (hlas se uloží a odešle na server).</p>
+
+        <div class="poll-options" role="group" aria-label="Wine preference poll">
+          <button type="button" class="poll-btn" data-poll="white" data-i18n="poll.white">Bílé</button>
+          <button type="button" class="poll-btn" data-poll="red" data-i18n="poll.red">Červené</button>
+          <button type="button" class="poll-btn" data-poll="rose" data-i18n="poll.rose">Růžové</button>
+          <button type="button" class="poll-btn" data-poll="sparkling" data-i18n="poll.sparkling">Šumivé / perlivé</button>
+          <button type="button" class="poll-btn" data-poll="sweet" data-i18n="poll.sweet">Sladší / polosladké</button>
+        </div>
+
+        <div class="poll-meta">
+          <span id="pollThanks" class="poll-thanks" aria-live="polite"></span>
+          <span id="pollStatus" class="small-note"></span>
+        </div>
+
+        <div class="poll-results" id="pollResults" aria-label="Poll results"></div>
+      </div>
+
+      <div class="poll-card">
+        <div class="eyebrow dark" data-i18n="reviews.eyebrow">Recenze</div>
+        <h3 class="poll-h3" data-i18n="reviews.title">Napište nám recenzi na Google</h3>
+        <p class="poll-lead" data-i18n="reviews.text">Pomůže nám to růst – a ostatním vybrat si víno s jistotou.</p>
+        <a class="btn primary" href="https://www.google.com/search?sca_esv=3952bdc93efbafc6&q=Vinn%C3%BD%20sklep%20Ivo%20Dev%C3%A1t%C3%BD%20Recenze&rflfq=1&num=20&stick=H4sIAAAAAAAAAONgkxIxNDAwNLe0MDM1NTG1sDQxtTQytdzAyPiKUTEsMy_v8F6F4uyc1AIFz7J8BZfUssMLS4BCQanJqXlVqYtYCasBAIoqJ-NjAAAA&rldimm=10017986554589459259&tbm=lcl&hl=cs-CZ&sa=X&ved=0CAcQ5foLahcKEwiokr3ZhZ-UAxUAAAAAHQAAAAAQBQ#lkt=LocalPoiReviews&arid=ChdDSUhNMG9nS0VJQ0FnSUNINzhhdl9RRRAB" target="_blank" rel="noopener noreferrer" data-i18n="reviews.button">Otevřít Google recenze</a>
+        <p class="small-note" data-i18n="reviews.note">Odkaz se otevře v nové kartě.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+  <section class="section quick-pay-section" id="quick-payment">
+    <div class="contact-card quick-pay-card">
+      <div>
+        <div class="eyebrow dark">Rychlá platba</div>
+        <h2>QR platba na místě</h2>
+        <p class="small-note">Nenápadná pomůcka pro osobní prodej: vyberte vína, počet lahví a zákazník naskenuje QR kód v mobilním bankovnictví.</p>
+      </div>
+      <div class="quick-pay-action">
+        <button class="btn secondary full" type="button" id="openQuickPayBtn">Rychlá QR platba</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-wrap">
+      <div>
+        <strong>Vinařství Devátý</strong><br />
+        <span data-i18n="footer.text">Online objednávky vín a osobní odběr ve sklípku nebo v Liberci.</span>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://www.instagram.com/ivo_winzer/" target="_blank" rel="noopener noreferrer" data-i18n="footer.instagram">Instagram</a>
+        <a href="mailto:ivo.devaty@email.cz" data-i18n="footer.email">E-mail</a>
+      </div>
+
+      <div class="lang-switcher" aria-label="Přepínač jazyků">
+        <span class="lang-label" data-i18n="lang.label">Jazyk:</span>
+        <button type="button" class="lang-btn active" data-lang="cs">CZ</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="de">DE</button>
+      </div>
+    </div>
+  </footer>
+
+  <div id="cartOverlay" class="overlay"></div>
+  <aside id="cartPanel" class="cart-panel">
+    <div class="cart-head"><h3 data-i18n="cart.title">Váš košík</h3><button id="closeCartBtn" class="icon-btn">✕</button></div>
+    <div id="cartItems" class="cart-items"><div id="cartEmpty" class="cart-empty" data-i18n="cart.empty">Košík je prázdný.</div></div>
+    <div class="cart-foot"><div class="cart-total"><span data-i18n="cart.total">Celkem</span><strong id="cartTotal">0 Kč</strong></div><button id="checkoutBtn" class="btn primary full" data-i18n="cart.checkout">Přejít k objednávce</button></div>
+  </aside>
+
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-card">
+      <div id="formScreen">
+        <h2 data-i18n="order.title">Objednávka</h2>
+        <p class="modal-sub" data-i18n="order.subtitle">Vyplňte údaje. Poté se otevře WhatsApp s připravenou nezávaznou objednávkou.</p>
+        <div class="order-summary"><h4 data-i18n="order.summary">Shrnutí objednávky</h4><div id="orderLines"></div></div>
+        <form id="checkoutForm">
+          <div class="grid-two">
+            <label><span data-i18n="form.name">Jméno a příjmení *</span><input id="fieldName" type="text" required placeholder="Jan Novák" /></label>
+            <label><span data-i18n="form.phone">Telefon *</span><input id="fieldPhone" type="tel" required placeholder="+420 777 123 456" /></label>
+          </div>
+          <label><span data-i18n="form.email">E-mail (nepovinný)</span><input id="fieldEmail" type="email" placeholder="jan@example.cz" /></label>
+          <label><span data-i18n="form.pickup">Způsob osobního převzetí *</span>
+            <div class="pickup-options">
+              <label class="pickup-option"><input type="radio" name="pickupPlace" value="Osobní převzetí – Liberec (přesné místo po domluvě)" checked /> <span><strong data-i18n="pickup.liberec">Osobní převzetí – Liberec</strong><small data-i18n="pickup.liberecNote">Přesné místo a čas doladíme přes WhatsApp nebo telefonicky.</small></span></label>
+              <label class="pickup-option"><input type="radio" name="pickupPlace" value="Osobní převzetí – sklípek: Pod Dubňansků horů 1213, 696 11 Mutěnice" /> <span><strong data-i18n="pickup.cellar">Osobní převzetí – sklípek</strong><small data-i18n="pickup.cellarNote">Pod Dubňansků horů 1213, 696 11 Mutěnice.</small></span></label>
+            </div>
+            <input id="fieldAddress" type="hidden" value="Osobní převzetí – Liberec (přesné místo po domluvě)" />
+          </label>
+          <label><span data-i18n="form.payment">Způsob platby *</span>
+          <div class="pickup-options">
+            <label class="pickup-option"><input type="radio" name="paymentMethod" value="cash" checked /> <span><strong data-i18n="payment.cash">Platba při předání</strong><small data-i18n="payment.cashNote">Nejjednodušší varianta – zaplatíte při osobním převzetí.</small></span></label>
+            <label class="pickup-option"><input type="radio" name="paymentMethod" value="qr" /> <span><strong data-i18n="payment.qr">QR platba předem</strong><small data-i18n="payment.qrNote">Po odeslání objednávky se zobrazí QR kód a údaje k platbě na účet 78-6041520237/0100.</small></span></label>
+          </div>
+        </label>
+        <p class="small-note" data-i18n="baggy.formNote">Máte zájem o 2l Baggy? Napište to prosím do poznámky.</p>
+        <label><span data-i18n="form.note">Poznámka</span><textarea id="fieldNote" placeholder="Váš vzkaz..."></textarea></label>
+          <label class="checkbox"><input id="ageConfirmOrder" type="checkbox" required /> <span data-i18n="form.age">Potvrzuji, že mi je 18 let nebo více.</span></label>
+          <button class="btn primary full" type="submit" data-i18n="form.submit">Odeslat objednávku</button>
+          <button class="btn secondary full" type="button" id="backToCartBtn" data-i18n="form.back">← Zpět do košíku</button>
+        </form>
+      </div>
+      <div id="confirmScreen" class="hidden">
+        <div class="confirm-top">
+          <div class="bubble">💬</div>
+          <h2 data-i18n="confirm.title">Objednávka je připravena</h2>
+          <p class="modal-sub" data-i18n="confirm.subtitle">Dokončete objednávku odesláním připravené zprávy přes WhatsApp.</p>
+        </div>
+        <div class="qr-box">
+          <h3 data-i18n="confirm.qrTitle">Detail objednávky</h3>
+          <p data-i18n="confirm.qrText">Níže vidíte shrnutí odeslané objednávky.</p>
+          <div id="qrcode"></div>
+          <div id="waDetail" class="wa-detail"></div>
+        </div>
+        <a id="whatsAppOrderBtn" class="btn primary full" href="#" target="_blank" rel="noopener noreferrer" data-i18n="confirm.open">Odeslat objednávku přes WhatsApp</a>
+        <button class="btn secondary full" type="button" id="finishOrderBtn" data-i18n="confirm.finish">Hotovo – zavřít</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="quickPayOverlay" class="modal-overlay quick-pay-modal-overlay">
+    <div class="modal-card quick-pay-modal-card">
+      <div class="quick-pay-head">
+        <div>
+          <h2>Rychlá QR platba</h2>
+          <p class="modal-sub">Vyberte prodaná vína a vygenerujte QR platbu na místě. Bez e-mailu a bez objednávky.</p>
+        </div>
+        <button id="closeQuickPayBtn" class="icon-btn" type="button">✕</button>
+      </div>
+      <div id="quickPayRows" class="quick-pay-rows"></div>
+      <div class="quick-pay-total">
+        <span>Celkem</span>
+        <strong id="quickPayTotal">0 Kč</strong>
+      </div>
+      <button id="generateQuickPayQrBtn" class="btn primary full" type="button">Vygenerovat QR platbu</button>
+      <div id="quickPayResult" class="quick-pay-result hidden">
+        <div class="qr-box quick-pay-qr-box">
+          <h3>QR platba</h3>
+          <p>Naskenujte v bankovní aplikaci.</p>
+          <div id="quickPayQrCode"></div>
+          <div id="quickPayDetails" class="wa-detail"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const translations = {
+        cs: {
+          title: 'Vinařství Devátý',
+          pageDescription: 'Vinařství Devátý – online objednávky vín a osobní odběr ve sklípku nebo v Liberci.',
+          imageAlt: 'Atmosféra vinařství',
+          placeholders: {
+            fieldName: 'Jan Novák',
+            fieldPhone: '+420 777 123 456',
+            fieldEmail: 'jan@example.cz',
+            fieldAddress: 'Ulice, město, PSČ – nebo napiš osobní odběr',
+            fieldNote: 'Váš vzkaz...'
+          },
+          'age.title': 'Vstup pouze pro osoby starší 18 let',
+          'age.text': 'Tyto stránky jsou určeny výhradně návštěvníkům starším 18 let. Alkohol neprodáváme osobám mladším 18 let.',
+          'age.confirm': 'Je mi 18 a více',
+          'age.leave': 'Opustit stránku',
+          'brand.sub': 'Pod Dubňanskou horou',
+          'nav.about': 'O nás',
+          'nav.wines': 'Víno',
+          'nav.contact': 'Kontakt',
+          'cart.button': 'Košík',
+          'hero.badge': 'Malé vinařství · jižní Morava · poctivé řemeslo',
+          'hero.title': 'Poctivá vína z vinohradů pod Dubňanskou horou',
+          'hero.text': 'Vyberte si z nabídky vín a jednoduše odešlete nezávaznou objednávku přes formulář.',
+          'hero.f1': 'Objednávka přes formulář',
+          'hero.f2': 'Možnost osobního odběru',
+          'hero.f3': 'Platba až při předání nebo po domluvě QR',
+          'hero.scroll': 'Procházet vína',
+          'about.eyebrow': 'O vinařství',
+          'about.title': 'Malé vinařství s láskou k řemeslu i krajině',
+          'about.p1': 'Jsme malé vinařství pod Dubňanskou horou nedaleko Mutěnic, založené lidmi ze severu Čech, kteří si zamilovali moravské vinohrady i poctivé řemeslo.',
+          'about.p2': 'Víno tvoříme s láskou, respektem k přírodě a inspirací burgundským přístupem, který staví na čistotě vína, charakteru hroznů a šetrné práci ve sklepě s minimem zásahů.',
+ 'about.p3': 'Naše vína si postupně našla své příznivce a podařilo se jim získat ocenění i v lokálních soutěžích.',
+ 'about.p4': 'Naším cílem je přenést do každé lahve slunce jižní Moravy, čistý projev odrůdy a radost z dobře odvedené práce.',
+          'wines.eyebrow': 'Nabídka',
+          'wines.title': 'Nabídka vín',
+          'contact.eyebrow': 'Kontakt',
+          'contact.title': 'Objednávky a osobní odběr',
+          'contact.winemaker': 'Vinař:',
+          'contact.phone': 'Telefon / WhatsApp:',
+          'contact.email': 'E-mail:',
+          'contact.instagram': 'Instagram:',
+          'contact.address': 'Adresa sklípku pro osobní odběr:',
+          'contact.addressValue': 'Pod Dubňansků horů 1213, 696 11 Mutěnice',
+          'contact.note': 'Pokud zákazník zvolí osobní odběr, víno si může vyzvednout právě na této adrese sklípku.',
+          'contact.ico': 'IČO:',
+          'contact.icoValue': '60260271',
+          'how.title': 'Jak probíhá objednávka',
+          'how.1': 'Zákazník vybere vína do košíku a vyplní objednávkový formulář.',
+          'how.2': 'Po vyplnění formuláře se otevře WhatsApp s připravenou objednávkou pro vinaře.',
+          'how.3': 'Zákazník zkontroluje připravenou zprávu a odešle ji vinaři přes WhatsApp.',
+          'how.4': 'Vinař objednávku potvrdí a domluví konkrétní čas a místo převzetí.',
+          'how.5': 'Platba předem není vyžadována – ideálně proběhne při osobním předání, případně po domluvě QR kódem.',
+          'footer.text': 'Online objednávky vín a osobní odběr ve sklípku nebo v Liberci.',
+          'footer.instagram': 'Instagram',
+          'footer.email': 'E-mail',
+          'lang.label': 'Jazyk:',
+        'trust.noPrepay': 'Bez platby předem',
+        'trust.cash': 'Ideálně z ruky do ruky při předání',
+        'trust.shipping': 'Zaslání jen po domluvě a minimálně celý karton',
+        'trust.baggy': 'Možnost objednání také do 2l Baggy',
+        'baggy.title': 'Také v 2l balení Baggy',
+        'baggy.text': 'Vybraná vína lze po domluvě objednat také v praktickém 2l balení Baggy místo klasických lahví 0,75 l. Zájem prosím uveďte do poznámky v objednávce.',
+        'baggy.formNote': 'Máte zájem o 2l Baggy? Napište to prosím do poznámky.',
+        'payment.title': 'Platba a převzetí bez obav',
+        'payment.text': 'Na webu není vyžadována žádná platba předem. Nejčastěji probíhá osobní předání a platba z ruky do ruky. Pokud se domluvíme jinak, pošleme QR kód až individuálně přes WhatsApp.',
+        'shipping.note': 'Zaslání vína je možné pouze po předchozí domluvě přes WhatsApp nebo telefonicky, a to minimálně po celém kartonu – kvůli ceně dopravy a riziku rozbití lahví.',
+          'cart.title': 'Váš košík',
+          'cart.empty': 'Košík je prázdný.',
+          'cart.total': 'Celkem',
+          'cart.checkout': 'Přejít k objednávce',
+          'order.title': 'Objednávka',
+          'order.subtitle': 'Vyplňte údaje. Poté se otevře WhatsApp s připravenou nezávaznou objednávkou.',
+          'order.summary': 'Shrnutí objednávky',
+          'form.name': 'Jméno a příjmení *',
+          'form.phone': 'Telefon *',
+          'form.email': 'E-mail (nepovinný)',
+          'form.address': 'Doručovací adresa / osobní odběr',
+        'form.pickup': 'Způsob osobního převzetí *',
+        'form.payment': 'Způsob platby *',
+        'payment.cash': 'Platba při předání',
+        'payment.cashNote': 'Nejjednodušší varianta – zaplatíte při osobním převzetí.',
+        'payment.qr': 'QR platba předem',
+        'payment.qrNote': 'Po odeslání objednávky se zobrazí QR kód a údaje k platbě na účet 78-6041520237/0100.',
+        'pickup.liberec': 'Osobní převzetí – Liberec',
+        'pickup.liberecNote': 'Přesné místo a čas doladíme přes WhatsApp nebo telefonicky.',
+        'pickup.cellar': 'Osobní převzetí – sklípek',
+        'pickup.cellarNote': 'Pod Dubňansků horů 1213, 696 11 Mutěnice.',
+          'form.note': 'Poznámka',
+          'form.age': 'Potvrzuji, že mi je 18 let nebo více.',
+          'form.submit': 'Odeslat objednávku',
+          'form.back': '← Zpět do košíku',
+          'confirm.title': 'Objednávka je připravena',
+          'confirm.subtitle': 'Dokončete objednávku odesláním připravené zprávy přes WhatsApp.',
+          'confirm.qrTitle': 'Detail objednávky',
+          'confirm.qrText': 'Níže vidíte shrnutí odeslané objednávky.',
+          'confirm.open': 'Odeslat objednávku přes WhatsApp',
+          'confirm.finish': 'Hotovo – zavřít',
+        
+ 'poll.eyebrow': 'Anketa',
+ 'poll.title': 'Co vám chutná nejvíc?',
+ 'poll.lead': 'Klikněte a uvidíte výsledky (hlas se uloží a odešle na server).',
+ 'poll.white': 'Bílé',
+ 'poll.red': 'Červené',
+ 'poll.rose': 'Růžové',
+ 'poll.sparkling': 'Šumivé / perlivé',
+ 'poll.sweet': 'Sladší / polosladké',
+ 'poll.thanks': 'Díky! Hlas je započítán.',
+ 'poll.error': 'Nepodařilo se uložit hlas. Zkuste to prosím znovu.',
+ 'poll.loading': 'Načítám výsledky…',
+ 'poll.total': 'Celkem hlasů:',
+ 'reviews.eyebrow': 'Recenze',
+ 'reviews.title': 'Napište nám recenzi na Google',
+ 'reviews.text': 'Pomůže nám to růst – a ostatním vybrat si víno s jistotou.',
+ 'reviews.button': 'Otevřít Google recenze',
+ 'reviews.note': 'Odkaz se otevře v nové kartě.',},
+        en: {
+          title: 'Winery Devátý',
+          pageDescription: 'Winery Devátý – online wine orders and personal pickup at the cellar or in Liberec.',
+          imageAlt: 'Winery atmosphere',
+          placeholders: {
+            fieldName: 'John Smith',
+            fieldPhone: '+420 777 123 456',
+            fieldEmail: 'john@example.com',
+            fieldAddress: 'Street, city, ZIP – or write personal pickup',
+            fieldNote: 'Your message...'
+          },
+          'age.title': 'Entry only for visitors aged 18 and over',
+          'age.text': 'This website is intended exclusively for visitors aged 18 and over. We do not sell alcohol to minors.',
+          'age.confirm': 'I am 18 or older',
+          'age.leave': 'Leave this page',
+          'brand.sub': 'Below Dubňanská Hill',
+          'nav.about': 'About us',
+          'nav.wines': 'Wines',
+          'nav.contact': 'Contact',
+          'cart.button': 'Cart',
+          'hero.badge': 'Small winery · South Moravia · honest craft',
+          'hero.title': 'Honest wines from vineyards below Dubňanská Hill',
+          'hero.text': 'Choose from the wine selection and send a non-binding order easily through the form.',
+          'hero.f1': 'Order through the form',
+          'hero.f2': 'Personal pickup available',
+          'hero.f3': 'Payment on handover or by QR after agreement',
+          'hero.scroll': 'Browse wines',
+          'about.eyebrow': 'About the winery',
+          'about.title': 'A small winery with love for craft and landscape',
+          'about.p1': 'We are a small winery below Dubňanská Hill near Mutěnice, founded by people from northern Bohemia who fell in love with Moravian vineyards and honest craftsmanship.',
+          'about.p2': 'We create wine with love, respect for nature and inspiration from a Burgundy-style approach focused on purity, character of the grapes and gentle cellar work with minimal intervention.',
+ 'about.p3': 'Our wines have gradually found their admirers and have also earned awards in local competitions.',
+ 'about.p4': 'Our goal is to bring the sunshine of South Moravia, a clean varietal character and the joy of well-done work into every bottle.',
+          'wines.eyebrow': 'Offer',
+          'wines.title': 'Wine selection',
+          'contact.eyebrow': 'Contact',
+          'contact.title': 'Orders and personal pickup',
+          'contact.winemaker': 'Winemaker:',
+          'contact.phone': 'Phone / WhatsApp:',
+          'contact.email': 'E-mail:',
+          'contact.instagram': 'Instagram:',
+          'contact.address': 'Cellar address for personal pickup:',
+          'contact.addressValue': 'Pod Dubňansků horů 1213, 696 11 Mutěnice',
+          'contact.note': 'If the customer chooses personal pickup, the wine can be collected directly at this cellar address.',
+          'contact.ico': 'Company ID:',
+          'contact.icoValue': '60260271',
+          'how.title': 'How ordering works',
+          'how.1': 'The customer adds wines to the cart and fills in the order form.',
+          'how.2': 'After completing the form, WhatsApp opens with the order prepared for the winemaker.',
+          'how.3': 'The customer checks the prepared message and sends it to the winemaker via WhatsApp.',
+          'how.4': 'The winemaker confirms the order and agrees the exact time and place of pickup.',
+          'how.5': 'No upfront payment is required – ideally payment is made on personal handover, or by QR code after individual agreement.',
+          'footer.text': 'Online wine orders and personal pickup at the cellar or in Liberec.',
+          'footer.instagram': 'Instagram',
+          'footer.email': 'E-mail',
+          'lang.label': 'Language:',
+        'trust.noPrepay': 'No upfront payment required',
+        'trust.cash': 'Preferably paid hand to hand on pickup',
+        'trust.shipping': 'Shipping only by agreement and at least one full carton',
+        'trust.baggy': 'Also available in a 2 L Baggy',
+        'baggy.title': 'Also available in a 2 L Baggy',
+        'baggy.text': 'Selected wines can be ordered by agreement in a practical 2 L Baggy instead of standard 0.75 L bottles. Please mention it in the order note.',
+        'baggy.formNote': 'Interested in a 2 L Baggy? Please mention it in the note.',
+        'payment.title': 'Payment and pickup without worries',
+        'payment.text': 'No upfront payment is required on the website. Most orders are handed over in person and paid directly on pickup. If agreed individually, we can send a payment QR code via WhatsApp.',
+        'shipping.note': 'Wine shipping is possible only after prior agreement via WhatsApp or phone, and only for at least one full carton – due to shipping cost and risk of bottle breakage.',
+          'cart.title': 'Your cart',
+          'cart.empty': 'Your cart is empty.',
+          'cart.total': 'Total',
+          'cart.checkout': 'Proceed to order',
+          'order.title': 'Order',
+          'order.subtitle': 'Fill in your details. WhatsApp will then open with a prepared non-binding order.',
+          'order.summary': 'Order summary',
+          'form.name': 'Full name *',
+          'form.phone': 'Phone *',
+          'form.email': 'E-mail (optional)',
+          'form.address': 'Delivery address / personal pickup',
+        'form.pickup': 'Personal pickup option *',
+        'form.payment': 'Payment method *',
+        'payment.cash': 'Payment on pickup',
+        'payment.cashNote': 'The simplest option – you pay on personal pickup.',
+        'payment.qr': 'QR payment in advance',
+        'payment.qrNote': 'After sending the order, a QR code and bank transfer details for account 78-6041520237/0100 will be shown.',
+        'pickup.liberec': 'Personal pickup – Liberec',
+        'pickup.liberecNote': 'Exact place and time will be agreed via WhatsApp or phone.',
+        'pickup.cellar': 'Personal pickup – cellar',
+        'pickup.cellarNote': 'Pod Dubňansků horů 1213, 696 11 Mutěnice.',
+          'form.note': 'Note',
+          'form.age': 'I confirm that I am 18 years old or older.',
+          'form.submit': 'Send order',
+          'form.back': '← Back to cart',
+          'confirm.title': 'Your order is ready',
+          'confirm.subtitle': 'Complete the order by sending the prepared message via WhatsApp.',
+          'confirm.qrTitle': 'Order detail',
+          'confirm.qrText': 'Below you can see a summary of the submitted order.',
+          'confirm.open': 'Send order via WhatsApp',
+          'confirm.finish': 'Done – close',
+        
+ 'poll.eyebrow': 'Poll',
+ 'poll.title': 'What do you like the most?',
+ 'poll.lead': 'Tap an option to vote and see results (your vote is sent to the server).',
+ 'poll.white': 'White',
+ 'poll.red': 'Red',
+ 'poll.rose': 'Rosé',
+ 'poll.sparkling': 'Sparkling',
+ 'poll.sweet': 'Sweeter / semi-sweet',
+ 'poll.thanks': 'Thanks! Your vote has been counted.',
+ 'poll.error': 'Could not save your vote. Please try again.',
+ 'poll.loading': 'Loading results…',
+ 'poll.total': 'Total votes:',
+ 'reviews.eyebrow': 'Reviews',
+ 'reviews.title': 'Leave us a Google review',
+ 'reviews.text': 'It helps us grow – and helps others choose with confidence.',
+ 'reviews.button': 'Open Google reviews',
+ 'reviews.note': 'The link opens in a new tab.',},
+        de: {
+          title: 'Weingut Devátý',
+          pageDescription: 'Weingut Devátý – Online-Weinbestellungen und persönliche Abholung im Weinkeller oder in Liberec.',
+          imageAlt: 'Atmosphäre des Weinguts',
+          placeholders: {
+            fieldName: 'Max Mustermann',
+            fieldPhone: '+420 777 123 456',
+            fieldEmail: 'max@example.de',
+            fieldAddress: 'Straße, Ort, PLZ – oder persönliche Abholung angeben',
+            fieldNote: 'Ihre Nachricht...'
+          },
+          'age.title': 'Zutritt nur für Personen ab 18 Jahren',
+          'age.text': 'Diese Website ist ausschließlich für Besucher ab 18 Jahren bestimmt. Wir verkaufen keinen Alkohol an Minderjährige.',
+          'age.confirm': 'Ich bin 18 oder älter',
+          'age.leave': 'Seite verlassen',
+          'brand.sub': 'Unter dem Dubňanská-Berg',
+          'nav.about': 'Über uns',
+          'nav.wines': 'Weine',
+          'nav.contact': 'Kontakt',
+          'cart.button': 'Warenkorb',
+          'hero.badge': 'Kleines Weingut · Südmähren · ehrliches Handwerk',
+          'hero.title': 'Ehrliche Weine aus Weinbergen unter dem Dubňanská-Berg',
+          'hero.text': 'Wählen Sie aus dem Weinangebot und senden Sie eine unverbindliche Bestellung bequem über das Formular.',
+          'hero.f1': 'Bestellung über Formular',
+          'hero.f2': 'Persönliche Abholung möglich',
+          'hero.f3': 'Zahlung bei Übergabe oder QR nach Absprache',
+          'hero.scroll': 'Weine ansehen',
+          'about.eyebrow': 'Über das Weingut',
+          'about.title': 'Ein kleines Weingut mit Liebe zum Handwerk und zur Landschaft',
+          'about.p1': 'Wir sind ein kleines Weingut unter dem Dubňanská-Berg in der Nähe von Mutěnice, gegründet von Menschen aus Nordböhmen, die sich in mährische Weinberge und ehrliches Handwerk verliebt haben.',
+          'about.p2': 'Wir erzeugen Wein mit Liebe, Respekt vor der Natur und inspiriert von einem burgundischen Ansatz, der auf Reinheit des Weins, Charakter der Trauben und schonende Kellerarbeit mit minimalen Eingriffen setzt.',
+ 'about.p3': 'Unsere Weine haben nach und nach ihre Liebhaber gefunden und konnten auch bei lokalen Wettbewerben Auszeichnungen gewinnen.',
+ 'about.p4': 'Unser Ziel ist es, die Sonne Südmährens, einen klaren Sortencharakter und die Freude an guter Arbeit in jede Flasche zu bringen.',
+          'wines.eyebrow': 'Angebot',
+          'wines.title': 'Weinangebot',
+          'contact.eyebrow': 'Kontakt',
+          'contact.title': 'Bestellungen und persönliche Abholung',
+          'contact.winemaker': 'Winzer:',
+          'contact.phone': 'Telefon / WhatsApp:',
+          'contact.email': 'E-Mail:',
+          'contact.instagram': 'Instagram:',
+          'contact.address': 'Kelleradresse für persönliche Abholung:',
+          'contact.addressValue': 'Pod Dubňansků horů 1213, 696 11 Mutěnice',
+          'contact.note': 'Wenn der Kunde persönliche Abholung wählt, kann der Wein direkt an dieser Kelleradresse abgeholt werden.',
+          'contact.ico': 'Firmen-ID:',
+          'contact.icoValue': '60260271',
+          'how.title': 'So funktioniert die Bestellung',
+          'how.1': 'Der Kunde legt Weine in den Warenkorb und füllt das Bestellformular aus.',
+          'how.2': 'Nach dem Ausfüllen des Formulars öffnet sich WhatsApp mit der vorbereiteten Bestellung für den Winzer.',
+          'how.3': 'Der Kunde prüft die vorbereitete Nachricht und sendet sie per WhatsApp an den Winzer.',
+          'how.4': 'Der Winzer bestätigt die Bestellung und vereinbart den genauen Zeitpunkt und Ort der Abholung.',
+          'how.5': 'Eine Vorauszahlung ist nicht erforderlich – idealerweise erfolgt die Zahlung bei persönlicher Übergabe oder nach Absprache per QR-Code.',
+          'footer.text': 'Online-Weinbestellungen und persönliche Abholung im Weinkeller oder in Liberec.',
+          'footer.instagram': 'Instagram',
+          'footer.email': 'E-Mail',
+          'lang.label': 'Sprache:',
+        'trust.noPrepay': 'Keine Vorauszahlung erforderlich',
+        'trust.cash': 'Am besten direkt bei Übergabe bezahlen',
+        'trust.shipping': 'Versand nur nach Absprache und mindestens ein voller Karton',
+        'trust.baggy': 'Auch im 2-Liter-Baggy erhältlich',
+        'baggy.title': 'Auch im 2-Liter-Baggy erhältlich',
+        'baggy.text': 'Ausgewählte Weine können nach Absprache auch im praktischen 2-Liter-Baggy statt in klassischen 0,75-Liter-Flaschen bestellt werden. Bitte im Bestellhinweis angeben.',
+        'baggy.formNote': 'Interesse an einem 2-Liter-Baggy? Bitte im Hinweis angeben.',
+        'payment.title': 'Zahlung und Abholung ohne Sorgen',
+        'payment.text': 'Auf der Website ist keine Vorauszahlung erforderlich. Meist erfolgt die persönliche Übergabe mit direkter Zahlung bei Abholung. Falls individuell vereinbart, senden wir einen Zahlungs-QR-Code per WhatsApp.',
+        'shipping.note': 'Weinversand ist nur nach vorheriger Absprache per WhatsApp oder telefonisch möglich, und nur ab einem vollen Karton – wegen Versandkosten und Bruchrisiko.',
+          'cart.title': 'Ihr Warenkorb',
+          'cart.empty': 'Ihr Warenkorb ist leer.',
+          'cart.total': 'Gesamt',
+          'cart.checkout': 'Zur Bestellung',
+          'order.title': 'Bestellung',
+          'order.subtitle': 'Füllen Sie die Angaben aus. Danach öffnet sich WhatsApp mit der vorbereiteten unverbindlichen Bestellung.',
+          'order.summary': 'Bestellübersicht',
+          'form.name': 'Vor- und Nachname *',
+          'form.phone': 'Telefon *',
+          'form.email': 'E-Mail (optional)',
+          'form.address': 'Lieferadresse / persönliche Abholung',
+        'form.pickup': 'Option für persönliche Abholung *',
+        'form.payment': 'Zahlungsmethode *',
+        'payment.cash': 'Zahlung bei Abholung',
+        'payment.cashNote': 'Die einfachste Variante – Sie zahlen bei persönlicher Abholung.',
+        'payment.qr': 'QR-Zahlung im Voraus',
+        'payment.qrNote': 'Nach dem Absenden der Bestellung werden QR-Code und Bankdaten für das Konto 78-6041520237/0100 angezeigt.',
+        'pickup.liberec': 'Persönliche Abholung – Liberec',
+        'pickup.liberecNote': 'Genauer Ort und Zeitpunkt werden per WhatsApp oder telefonisch vereinbart.',
+        'pickup.cellar': 'Persönliche Abholung – Weinkeller',
+        'pickup.cellarNote': 'Pod Dubňansků horů 1213, 696 11 Mutěnice.',
+          'form.note': 'Notiz',
+          'form.age': 'Ich bestätige, dass ich 18 Jahre oder älter bin.',
+          'form.submit': 'Bestellung senden',
+          'form.back': '← Zurück zum Warenkorb',
+          'confirm.title': 'Ihre Bestellung ist vorbereitet',
+          'confirm.subtitle': 'Schließen Sie die Bestellung ab, indem Sie die vorbereitete Nachricht über WhatsApp senden.',
+          'confirm.qrTitle': 'Bestelldetail',
+          'confirm.qrText': 'Unten sehen Sie eine Zusammenfassung der gesendeten Bestellung.',
+          'confirm.open': 'Bestellung über WhatsApp senden',
+          'confirm.finish': 'Fertig – schließen',
+        
+ 'poll.eyebrow': 'Umfrage',
+ 'poll.title': 'Was schmeckt Ihnen am meisten?',
+ 'poll.lead': 'Option wählen und Ergebnisse sehen (Ihre Stimme wird an den Server gesendet).',
+ 'poll.white': 'Weiß',
+ 'poll.red': 'Rot',
+ 'poll.rose': 'Rosé',
+ 'poll.sparkling': 'Schaumwein / perlend',
+ 'poll.sweet': 'Süßer / halbsüß',
+ 'poll.thanks': 'Danke! Ihre Stimme wurde gezählt.',
+ 'poll.error': 'Stimme konnte nicht gespeichert werden. Bitte erneut versuchen.',
+ 'poll.loading': 'Ergebnisse werden geladen…',
+ 'poll.total': 'Stimmen gesamt:',
+ 'reviews.eyebrow': 'Bewertungen',
+ 'reviews.title': 'Schreiben Sie uns eine Google-Bewertung',
+ 'reviews.text': 'Das hilft uns zu wachsen – und anderen bei der Auswahl.',
+ 'reviews.button': 'Google-Bewertungen öffnen',
+ 'reviews.note': 'Der Link öffnet sich in einem neuen Tab.',}
+      };
+
+      window.__vinoTranslations = translations;
+      const translatableNodes = document.querySelectorAll('[data-i18n]');
+      const langButtons = document.querySelectorAll('.lang-btn');
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const aboutImage = document.getElementById('aboutImage');
+      const placeholders = {
+        fieldName: document.getElementById('fieldName'),
+        fieldPhone: document.getElementById('fieldPhone'),
+        fieldEmail: document.getElementById('fieldEmail'),
+        fieldAddress: document.getElementById('fieldAddress'),
+        fieldNote: document.getElementById('fieldNote')
+      };
+
+      function applyLanguage(lang) {
+        const copy = translations[lang] || translations.cs;
+        document.documentElement.lang = lang;
+        document.title = copy.title;
+        if (metaDescription) metaDescription.setAttribute('content', copy.pageDescription);
+
+        translatableNodes.forEach((node) => {
+          const key = node.getAttribute('data-i18n');
+          if (!copy[key]) return;
+          if (node.getAttribute('data-i18n-html') === 'true') {
+            node.innerHTML = copy[key];
+          } else {
+            node.textContent = copy[key];
+          }
+        });
+
+        Object.entries(placeholders).forEach(([key, input]) => {
+          if (input && copy.placeholders && copy.placeholders[key]) {
+            input.placeholder = copy.placeholders[key];
+          }
+        });
+
+        if (aboutImage) {
+          aboutImage.alt = copy.imageAlt || translations.cs.imageAlt;
+        }
+
+        langButtons.forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        localStorage.setItem('vinoLanguage', lang);
+        window.vinoLocale = lang;
+        window.dispatchEvent(new CustomEvent('vino-language-change', { detail: { lang } }));
+      }
+
+      langButtons.forEach((button) => {
+        button.addEventListener('click', () => applyLanguage(button.dataset.lang));
+      });
+
+      const savedLanguage = localStorage.getItem('vinoLanguage') || 'cs';
+      applyLanguage(savedLanguage);
+    })();
+  </script>
+
+  <script>
+  (function(){
+    const POLL_API = 'https://script.google.com/macros/s/AKfycbxuY3ztF6GEmEXSN7zlAlREZYFLtqm3-IVE5UYN3MnxIh7MFiZ0jWGDRiKtJ1JdUVin/exec';
+
+    const KEY_VOTED = 'vinoPollVoted_global_v1';
+    const KEY_CLIENT = 'vinoPollClientId_v1';
+
+    const buttons = Array.from(document.querySelectorAll('.poll-btn'));
+    const resultsEl = document.getElementById('pollResults');
+    const thanksEl = document.getElementById('pollThanks');
+    const statusEl = document.getElementById('pollStatus');
+    if(!resultsEl || buttons.length===0) return;
+
+    function getLang(){
+      return window.vinoLocale || document.documentElement.lang || 'cs';
+    }
+    function t(key, fallback){
+      const lang = getLang();
+      const dict = (window.__vinoTranslations && window.__vinoTranslations[lang]) || null;
+      return (dict && dict[key]) ? dict[key] : fallback;
+    }
+
+    const labels = {
+      white: () => t('poll.white','Bílé'),
+      red: () => t('poll.red','Červené'),
+      rose: () => t('poll.rose','Růžové'),
+      sparkling: () => t('poll.sparkling','Šumivé / perlivé'),
+      sweet: () => t('poll.sweet','Sladší / polosladké')
+    };
+
+    function clientId(){
+      let id = localStorage.getItem(KEY_CLIENT);
+      if(!id){
+        id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));
+        localStorage.setItem(KEY_CLIENT, id);
+      }
+      return id;
+    }
+
+    function hasVoted(){ return localStorage.getItem(KEY_VOTED)==='1'; }
+    function setVoted(){ localStorage.setItem(KEY_VOTED,'1'); }
+    function setBusy(isBusy){ buttons.forEach(b=> b.disabled = isBusy || hasVoted()); }
+
+    async function apiGetResults(){
+      const r = await fetch(POLL_API + '?action=results', { method:'GET', redirect:'follow' });
+      return await r.json();
+    }
+
+    async function apiVote(option){
+      const payload = { action:'vote', option, clientId: clientId() };
+      const r = await fetch(POLL_API, {
+        method:'POST',
+        redirect:'follow',
+        headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return await r.json();
+    }
+
+    function render(counts){
+      const total = Object.values(counts).reduce((a,b)=>a+b,0) || 0;
+      resultsEl.innerHTML = Object.keys(labels).map(k=>{
+        const val = counts[k] || 0;
+        const pct = total ? Math.round((val/total)*100) : 0;
+        return `
+          <div class="poll-row">
+            <div class="poll-label">${labels[k]()}<\/div>
+            <div class="poll-bar" aria-label="${labels[k]()} ${pct}%">
+              <div class="poll-fill" style="width:${pct}%"><\/div>
+            <\/div>
+            <div class="poll-num">${pct}%<\/div>
+          <\/div>`;
+      }).join('') + `
+        <div class="small-note" style="margin-top:8px">${t('poll.total','Celkem hlasů:')} ${total}<\/div>`;
+
+      thanksEl.textContent = hasVoted() ? t('poll.thanks','Díky! Hlas je započítán.') : '';
+      setBusy(false);
+    }
+
+    async function refresh(){
+      statusEl.textContent = t('poll.loading','Načítám výsledky…');
+      try{
+        const data = await apiGetResults();
+        statusEl.textContent = '';
+        render(data.counts || {});
+      } catch(e){
+        statusEl.textContent = t('poll.error','Nepodařilo se uložit hlas. Zkuste to prosím znovu.');
+        setBusy(false);
+      }
+    }
+
+    buttons.forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        if(hasVoted()) return;
+        const option = btn.getAttribute('data-poll');
+        setBusy(true);
+        statusEl.textContent = '';
+        try{
+          const data = await apiVote(option);
+          if(data && data.ok){
+            setVoted();
+            await refresh();
+            thanksEl.textContent = t('poll.thanks','Díky! Hlas je započítán.');
+          } else {
+            setBusy(false);
+            statusEl.textContent = t('poll.error','Nepodařilo se uložit hlas. Zkuste to prosím znovu.');
+          }
+        } catch(e){
+          setBusy(false);
+          statusEl.textContent = t('poll.error','Nepodařilo se uložit hlas. Zkuste to prosím znovu.');
+        }
+      });
+    });
+
+    window.addEventListener('vino-language-change', refresh);
+    setBusy(false);
+    refresh();
+  })();
+  </script>
+
+
+  <script>
+    (function(){
+      function syncPickup(){
+        const hidden = document.getElementById('fieldAddress');
+        const selected = document.querySelector('input[name="pickupPlace"]:checked');
+        if(hidden && selected) hidden.value = selected.value;
+      }
+      document.querySelectorAll('input[name="pickupPlace"]').forEach(r => r.addEventListener('change', syncPickup));
+      syncPickup();
+
+      // Fallback pro základní ovládací tlačítka, kdyby externí app.js nebyl načtený nebo spadl.
+      const cartPanel = document.getElementById('cartPanel');
+      const cartOverlay = document.getElementById('cartOverlay');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const formScreen = document.getElementById('formScreen');
+      const confirmScreen = document.getElementById('confirmScreen');
+      function openCart(){ cartPanel && cartPanel.classList.add('open','active'); cartOverlay && cartOverlay.classList.add('open','active'); }
+      function closeCart(){ cartPanel && cartPanel.classList.remove('open','active'); cartOverlay && cartOverlay.classList.remove('open','active'); }
+      function openOrder(){ closeCart(); modalOverlay && modalOverlay.classList.add('open','active'); formScreen && formScreen.classList.remove('hidden'); confirmScreen && confirmScreen.classList.add('hidden'); }
+      function closeOrder(){ modalOverlay && modalOverlay.classList.remove('open','active'); }
+      document.getElementById('openCartBtn')?.addEventListener('click', openCart);
+      document.getElementById('closeCartBtn')?.addEventListener('click', closeCart);
+      document.getElementById('cartOverlay')?.addEventListener('click', closeCart);
+      document.getElementById('checkoutBtn')?.addEventListener('click', openOrder);
+      document.getElementById('backToCartBtn')?.addEventListener('click', function(){ closeOrder(); openCart(); });
+      document.getElementById('finishOrderBtn')?.addEventListener('click', closeOrder);
+      document.getElementById('modalOverlay')?.addEventListener('click', function(e){ if(e.target === modalOverlay) closeOrder(); });
+    })();
+  </script>
+
+
+<script>
+// --- Rychlá QR platba na místě ---
+(function(){
+  const QUICK_PAY_ACCOUNT = '78-6041520237/0100';
+  const QUICK_PAY_IBAN = 'CZ0301000000786041520237';
+  const QUICK_PAY_CURRENCY = 'CZK';
+  const QUICK_PAY_WINES = [
+    {id:1,name:'Rulandské bílé 2025',price:145},
+    {id:2,name:'Tramín červený 2025',price:149},
+    {id:3,name:'Veltlínské zelené 2025',price:147},
+    {id:4,name:'Ryzlink vlašský 2025',price:145},
+    {id:5,name:'Rosé 2025',price:150}
+  ];
+  let counts = {};
+  function el(id){ return document.getElementById(id); }
+  function money(value){ return Number(value).toLocaleString('cs-CZ') + ' Kč'; }
+  function total(){
+    return QUICK_PAY_WINES.reduce((sum,w)=>sum + (counts[w.id] || 0) * w.price, 0);
+  }
+  function orderReference(){ return String(Date.now()).slice(-10); }
+  function spaydValue(value){ return encodeURIComponent(String(value || '').replace(/\*/g,' ')).replace(/%20/g,'+').toUpperCase(); }
+  function buildSpayd(amount, vs){
+    const msg = 'RYCHLA PLATBA ' + vs + ' VINARSTVI DEVATY';
+    return 'SPD*1.0*ACC:' + QUICK_PAY_IBAN + '*AM:' + Number(amount).toFixed(2) + '*CC:' + QUICK_PAY_CURRENCY + '*X-VS:' + vs + '*MSG:' + spaydValue(msg);
+  }
+  function renderRows(){
+    const rows = el('quickPayRows');
+    if(!rows) return;
+    rows.innerHTML = QUICK_PAY_WINES.map(w=>{
+      const qty = counts[w.id] || 0;
+      return '<div class="quick-pay-row">' +
+        '<div><div class="quick-pay-row-name">' + w.name + '</div><div class="quick-pay-row-price">' + money(w.price) + ' / lahev</div></div>' +
+        '<div class="quick-pay-qty"><button class="qty-btn" type="button" data-quick-minus="' + w.id + '">−</button><strong>' + qty + '</strong><button class="qty-btn" type="button" data-quick-plus="' + w.id + '">+</button></div>' +
+        '</div>';
+    }).join('');
+    const totalEl = el('quickPayTotal');
+    if(totalEl) totalEl.textContent = money(total());
+  }
+  function changeQty(id, delta){
+    counts[id] = Math.max(0, (counts[id] || 0) + delta);
+    if(counts[id] === 0) delete counts[id];
+    renderRows();
+    const result = el('quickPayResult');
+    if(result) result.classList.add('hidden');
+  }
+  function openModal(){
+    renderRows();
+    const overlay = el('quickPayOverlay');
+    if(overlay) overlay.classList.add('open','active');
+  }
+  function closeModal(){
+    const overlay = el('quickPayOverlay');
+    if(overlay) overlay.classList.remove('open','active');
+  }
+  function generateQr(){
+    const amount = total();
+    if(amount <= 0){ alert('Vyberte prosím alespoň jednu lahev.'); return; }
+    const vs = orderReference();
+    const spayd = buildSpayd(amount, vs);
+    const qrWrap = el('quickPayQrCode');
+    if(qrWrap) qrWrap.innerHTML = '';
+    if(window.QRCode && qrWrap){
+      new QRCode(qrWrap, { text: spayd, width: 230, height: 230, correctLevel: QRCode.CorrectLevel.M });
+    }
+    const selected = QUICK_PAY_WINES
+      .filter(w => counts[w.id])
+      .map(w => w.name + ' × ' + counts[w.id] + ' = ' + money(w.price * counts[w.id]))
+      .join('<br>');
+    const details = el('quickPayDetails');
+    if(details){
+      details.innerHTML = '<strong>Částka:</strong> ' + money(amount) + '<br>' +
+        '<strong>Účet:</strong> ' + QUICK_PAY_ACCOUNT + '<br>' +
+        '<strong>IBAN:</strong> ' + QUICK_PAY_IBAN + '<br>' +
+        '<strong>Variabilní symbol:</strong> ' + vs + '<br><br>' +
+        '<strong>Vybraná vína:</strong><br>' + selected;
+    }
+    const result = el('quickPayResult');
+    if(result) result.classList.remove('hidden');
+  }
+  function bindQuickPay(){
+    const openBtn = el('openQuickPayBtn');
+    const closeBtn = el('closeQuickPayBtn');
+    const overlay = el('quickPayOverlay');
+    const genBtn = el('generateQuickPayQrBtn');
+    if(openBtn) openBtn.addEventListener('click', openModal);
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+    if(overlay) overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+    if(genBtn) genBtn.addEventListener('click', generateQr);
+    document.addEventListener('click', function(e){
+      const plus = e.target.closest('[data-quick-plus]');
+      const minus = e.target.closest('[data-quick-minus]');
+      if(plus) changeQty(Number(plus.getAttribute('data-quick-plus')), 1);
+      if(minus) changeQty(Number(minus.getAttribute('data-quick-minus')), -1);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindQuickPay); else bindQuickPay();
+})();
+</script>
+
+
+
+<script>
+// --- Nouzový košík + objednávka + e-mail + QR, pokud by externí app.js znovu spadl ---
+(function(){
+  if (window.__vinoEmergencyFallbackInstalled) return;
+  window.__vinoEmergencyFallbackInstalled = true;
+
+  const EMAILJS = {
+    publicKey: 'UcazScBvYErhhj6Mp',
+    serviceId: 'service_mcsep8m',
+    templateId: 'template_fzhugwb',
+    ownerEmail: 'ivo.devaty@email.cz',
+    ownerName: 'Vinařství Devátý'
+  };
+  const PAYMENT = {
+    account: '78-6041520237/0100',
+    iban: 'CZ0301000000786041520237',
+    currency: 'CZK'
+  };
+  const WINES = [
+    {id:1,name:'Rulandské bílé 2025',type:'Bílé víno – suché',vintage:'Ročník 2025',desc:'Jemné bílé víno s čistou ovocností, lehkým květinovým nádechem a příjemně kulatým závěrem.',price:145,award:'Tip vinaře',img:'images/wine-1.jpg'},
+    {id:2,name:'Tramín červený 2025',type:'Bílé víno – polosuché',vintage:'Ročník 2025',desc:'Aromatické víno s tóny růží, koření a zralého ovoce, s jemnou sladší linkou v dochuti.',price:149,award:'Aromatická odrůda',img:'images/wine-2.jpg'},
+    {id:3,name:'Veltlínské zelené 2025',type:'Bílé víno – suché',vintage:'Ročník 2025',desc:'Svěží a dobře pitelné víno s tóny zeleného jablka, citrusů a lehce kořenitým dozvukem.',price:147,award:'Svěží volba',img:'images/wine-3.jpg'},
+    {id:4,name:'Ryzlink vlašský 2025',type:'Bílé víno – suché',vintage:'Ročník 2025',desc:'Lehčí víno s jemnou kyselinkou, citrusovým projevem a čistým minerálním závěrem.',price:145,award:'',img:'images/wine-4.jpg'},
+    {id:5,name:'Rosé 2025',type:'Rosé – polosuché',vintage:'Ročník 2025',desc:'Lehké růžové víno s tóny jahod a drobného lesního ovoce, ideální na pohodové pití.',price:150,award:'Lehké rosé',img:'images/wine-5.jpg'}
+  ];
+
+  const fallbackCart = {};
+  let fallbackActive = false;
+  let emailJsInitialized = false;
+  const el = id => document.getElementById(id);
+  const esc = v => String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const money = v => Number(v).toLocaleString('cs-CZ') + ' Kč';
+  const cartCount = () => Object.values(fallbackCart).reduce((a,b)=>a+b,0);
+  const cartTotal = () => Object.entries(fallbackCart).reduce((sum,[id,qty]) => {
+    const w = WINES.find(x => x.id === Number(id));
+    return sum + (w ? w.price * qty : 0);
+  }, 0);
+  const selectedPickup = () => {
+    const s = document.querySelector('input[name="pickupPlace"]:checked');
+    const h = el('fieldAddress');
+    return s ? s.value : (h ? h.value : '');
+  };
+  const selectedPayment = () => {
+    const s = document.querySelector('input[name="paymentMethod"]:checked');
+    return s ? s.value : 'cash';
+  };
+  const orderRef = () => String(Date.now()).slice(-10);
+  const spaydValue = v => encodeURIComponent(String(v || '').replace(/\*/g,' ')).replace(/%20/g,'+').toUpperCase();
+  const buildSpayd = payload => 'SPD*1.0*ACC:' + PAYMENT.iban + '*AM:' + Number(payload.total || 0).toFixed(2) + '*CC:CZK*X-VS:' + payload.variableSymbol + '*MSG:' + spaydValue('OBJEDNAVKA ' + payload.variableSymbol + ' VINARSTVI DEVATY');
+
+  function cartItems(){
+    return Object.entries(fallbackCart).map(([id,qty]) => {
+      const w = WINES.find(x => x.id === Number(id));
+      return w ? { id:w.id, name:w.name, quantity:qty, unitPrice:w.price, subtotal:w.price*qty } : null;
+    }).filter(Boolean);
+  }
+  function itemsText(items){
+    return items.map(i => '- ' + i.name + ' × ' + i.quantity + ' ks = ' + money(i.subtotal)).join('\n');
+  }
+  function renderFallbackWines(force){
+    const grid = el('winesGrid');
+    if(!grid) return;
+    if(!force && grid.children.length > 0) return;
+    grid.innerHTML = WINES.map(w => {
+      const qty = fallbackCart[w.id] || 0;
+      return '<article class="wine-card"><div class="wine-image"><img src="'+esc(w.img)+'" alt="'+esc(w.name)+'"><span class="wine-type">'+esc(w.type)+'</span></div><div class="wine-body"><div class="wine-name">'+esc(w.name)+'</div><div class="wine-vintage">'+esc(w.vintage)+'</div><div class="wine-desc">'+esc(w.desc)+'</div>'+(w.award?'<div class="wine-tag">'+esc(w.award)+'</div>':'')+'</div><div class="wine-footer"><div class="wine-price">'+money(w.price)+' <span>/ 0,75 l</span></div><button id="fallback-btn-'+w.id+'" class="btn primary" type="button" onclick="fallbackAddToCart('+w.id+')">'+(qty?'V košíku ('+qty+')':'Přidat')+'</button></div></article>';
+    }).join('');
+  }
+  function updateFallbackCart(){
+    if(el('cartCount')) el('cartCount').textContent = cartCount();
+    if(el('cartTotal')) el('cartTotal').textContent = money(cartTotal());
+    const wrap = el('cartItems');
+    if(wrap){
+      wrap.innerHTML = '';
+      if(!cartCount()){
+        wrap.innerHTML = '<div id="cartEmpty" class="cart-empty">Košík je prázdný.</div>';
+      } else {
+        Object.entries(fallbackCart).forEach(([id,qty]) => {
+          const w = WINES.find(x => x.id === Number(id));
+          if(!w) return;
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = '<div class="cart-item-thumb"><img src="'+esc(w.img)+'" alt="'+esc(w.name)+'"></div><div class="cart-item-info"><div class="cart-item-name">'+esc(w.name)+'</div><div class="cart-item-price">'+money(w.price)+' / ks</div></div><div class="qty"><button class="qty-btn" type="button" onclick="fallbackChangeQty('+w.id+',-1)">−</button><strong>'+qty+'</strong><button class="qty-btn" type="button" onclick="fallbackChangeQty('+w.id+',1)">+</button></div><button class="remove-btn" type="button" onclick="fallbackRemoveFromCart('+w.id+')">×</button>';
+          wrap.appendChild(div);
+        });
+      }
+    }
+    renderFallbackWines(true);
+    renderFallbackOrderSummary();
+  }
+  function renderFallbackOrderSummary(){
+    const lines = el('orderLines');
+    if(!lines) return;
+    lines.innerHTML = '';
+    cartItems().forEach(i => {
+      const row = document.createElement('div');
+      row.className = 'order-line';
+      row.innerHTML = '<span>'+esc(i.name)+' × '+i.quantity+'</span><strong>'+money(i.subtotal)+'</strong>';
+      lines.appendChild(row);
+    });
+    const total = document.createElement('div');
+    total.className = 'order-line total';
+    total.innerHTML = '<span>Celkem</span><strong>'+money(cartTotal())+'</strong>';
+    lines.appendChild(total);
+  }
+
+  window.fallbackAddToCart = function(id){ fallbackCart[id] = (fallbackCart[id] || 0) + 1; updateFallbackCart(); };
+  window.fallbackChangeQty = function(id,delta){ fallbackCart[id] = Math.max(0, (fallbackCart[id] || 0) + delta); if(!fallbackCart[id]) delete fallbackCart[id]; updateFallbackCart(); };
+  window.fallbackRemoveFromCart = function(id){ delete fallbackCart[id]; updateFallbackCart(); };
+
+  function openCartFallback(){ if(el('cartPanel')) el('cartPanel').classList.add('open','active'); if(el('cartOverlay')) el('cartOverlay').classList.add('open','active'); }
+  function closeCartFallback(){ if(el('cartPanel')) el('cartPanel').classList.remove('open','active'); if(el('cartOverlay')) el('cartOverlay').classList.remove('open','active'); }
+  function openOrderFallback(){
+    if(!cartCount()){ alert('Košík je prázdný.'); return; }
+    closeCartFallback();
+    renderFallbackOrderSummary();
+    if(el('modalOverlay')) el('modalOverlay').classList.add('open','active');
+    if(el('formScreen')) el('formScreen').classList.remove('hidden');
+    if(el('confirmScreen')) el('confirmScreen').classList.add('hidden');
+  }
+  function ensureEmailReady(){
+    if(!window.emailjs) throw new Error('EmailJS knihovna není načtená. Zkontrolujte připojení k internetu nebo script v index.html.');
+    if(!emailJsInitialized){
+      emailjs.init({ publicKey: EMAILJS.publicKey, blockHeadless: true, limitRate: { id:'vino-order-form-fallback', throttle:10000 } });
+      emailJsInitialized = true;
+    }
+  }
+  async function sendEmail(toEmail, replyTo, subject, message, payload){
+    return emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, {
+      to_email: toEmail,
+      reply_to: replyTo || EMAILJS.ownerEmail,
+      from_name: EMAILJS.ownerName,
+      subject: subject,
+      message: message,
+      customer_name: payload.name,
+      customer_phone: payload.phone,
+      customer_email: payload.email || '',
+      pickup: payload.pickup || '',
+      order_items: itemsText(payload.items),
+      order_total: money(payload.total),
+      payment_method: payload.paymentMethod === 'qr' ? 'QR platba předem na bankovní účet' : 'Platba při předání',
+      payment_account: PAYMENT.account,
+      payment_iban: PAYMENT.iban,
+      payment_variable_symbol: payload.variableSymbol,
+      payment_qr_data: payload.qrData || '',
+      note: payload.note || '',
+      language: 'cs',
+      source: window.location.href
+    });
+  }
+  function paymentBlock(payload, owner){
+    const isQr = payload.paymentMethod === 'qr';
+    const head = owner ? (isQr ? 'PLATBA: QR KÓD / PŘEVOD NA ÚČET – ZKONTROLOVAT PŘIPSÁNÍ PLATBY' : 'PLATBA: PŘI PŘEDÁNÍ') : (isQr ? 'Zvolili jste QR platbu předem.' : 'Zvolili jste platbu při předání.');
+    const lines = ['==================================================', head, '=================================================='];
+    if(isQr){
+      lines.push('Číslo účtu: ' + PAYMENT.account, 'IBAN: ' + PAYMENT.iban, 'Variabilní symbol: ' + payload.variableSymbol, 'Částka: ' + money(payload.total));
+    }
+    lines.push('Kontakt na vinaře: ivo.devaty@email.cz, +420 724 366 369');
+    return lines.join('\n');
+  }
+  function ownerMessage(payload){
+    return ['Nová objednávka z webu – Vinařství Devátý','','Jméno: '+payload.name,'Telefon: '+payload.phone,'E-mail: '+(payload.email || 'neuveden'),'Převzetí: '+payload.pickup,'',paymentBlock(payload,true),'','Objednávka:',itemsText(payload.items),'','Celkem: '+money(payload.total),payload.note ? 'Poznámka: '+payload.note : null,'','Zdroj: '+window.location.href].filter(Boolean).join('\n');
+  }
+  function customerMessage(payload){
+    return ['Dobrý den,','','děkujeme za Vaši objednávku z webu Vinařství Devátý.','Brzy se ozveme kvůli potvrzení převzetí.','','Objednávka:',itemsText(payload.items),'','Převzetí: '+payload.pickup,'Celkem: '+money(payload.total),payload.note ? 'Poznámka: '+payload.note : null,'',paymentBlock(payload,false),'','S pozdravem\nVinařství Devátý'].filter(Boolean).join('\n');
+  }
+  function showConfirm(payload){
+    if(el('formScreen')) el('formScreen').classList.add('hidden');
+    if(el('confirmScreen')) el('confirmScreen').classList.remove('hidden');
+    const qrWrap = el('qrcode');
+    if(qrWrap) qrWrap.innerHTML = '';
+    if(payload.paymentMethod === 'qr' && payload.qrData && window.QRCode && qrWrap){
+      new QRCode(qrWrap, { text: payload.qrData, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+    }
+    if(el('waDetail')){
+      const info = payload.paymentMethod === 'qr'
+        ? '<div style="margin:1rem 0;padding:1rem;border:2px solid #5c1a2e;border-radius:12px;background:#fff7e6;color:#3d0f1e"><strong>QR platba předem</strong><br><strong>Částka:</strong> '+money(payload.total)+'<br><strong>Účet:</strong> '+PAYMENT.account+'<br><strong>IBAN:</strong> '+PAYMENT.iban+'<br><strong>VS:</strong> '+payload.variableSymbol+'</div>'
+        : '<div style="margin:1rem 0;padding:1rem;border:1px solid rgba(200,169,110,.45);border-radius:12px;background:#fff;color:#3d0f1e"><strong>Platba při předání</strong></div>';
+      el('waDetail').innerHTML = info + '<strong>Detail objednávky</strong><br><pre style="white-space:pre-wrap;text-align:left;font:inherit;margin:.8rem 0 0;color:inherit">'+esc(payload.message)+'</pre>';
+    }
+    if(el('whatsAppOrderBtn')) el('whatsAppOrderBtn').classList.add('hidden');
+  }
+  async function submitFallbackOrder(event){
+    if(!fallbackActive) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const name = el('fieldName') ? el('fieldName').value.trim() : '';
+    const phone = el('fieldPhone') ? el('fieldPhone').value.trim() : '';
+    const email = el('fieldEmail') ? el('fieldEmail').value.trim() : '';
+    const note = el('fieldNote') ? el('fieldNote').value.trim() : '';
+    if(!name || !phone){ alert('Vyplň prosím jméno a telefon.'); return; }
+    if(el('ageConfirmOrder') && !el('ageConfirmOrder').checked){ alert('Potvrď prosím věk 18+.'); return; }
+    const items = cartItems();
+    if(!items.length){ alert('Košík je prázdný.'); return; }
+    const pm = selectedPayment();
+    const payload = {
+      name, phone, email, note,
+      pickup: selectedPickup(),
+      items,
+      total: cartTotal(),
+      paymentMethod: pm,
+      variableSymbol: orderRef()
+    };
+    payload.qrData = pm === 'qr' ? buildSpayd(payload) : '';
+    payload.message = ['Nová objednávka z webu','','Jméno: '+name,'Telefon: '+phone,'E-mail: '+(email || 'neuveden'),'Převzetí: '+payload.pickup,'','Objednávka:',itemsText(items),'','Celkem: '+money(payload.total),note ? 'Poznámka: '+note : null].filter(Boolean).join('\n');
+    const submitBtn = el('checkoutForm') ? el('checkoutForm').querySelector('button[type="submit"]') : null;
+    const oldText = submitBtn ? submitBtn.textContent : '';
+    try{
+      if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Odesílám objednávku…'; }
+      ensureEmailReady();
+      await sendEmail(EMAILJS.ownerEmail, email || EMAILJS.ownerEmail, 'Nová objednávka vína – ' + name + ' – ' + money(payload.total), ownerMessage(payload), payload);
+      if(email){
+        await sendEmail(email, EMAILJS.ownerEmail, 'Potvrzení objednávky – Vinařství Devátý', customerMessage(payload), payload);
+      }
+      showConfirm(payload);
+    } catch(err){
+      console.error(err);
+      alert((err && err.message) ? err.message : 'Objednávku se nepodařilo odeslat.');
+    } finally {
+      if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = oldText; }
+    }
+  }
+  function bindFallbackControls(){
+    if(el('openCartBtn')) el('openCartBtn').addEventListener('click', openCartFallback);
+    if(el('closeCartBtn')) el('closeCartBtn').addEventListener('click', closeCartFallback);
+    if(el('cartOverlay')) el('cartOverlay').addEventListener('click', closeCartFallback);
+    if(el('checkoutBtn')) el('checkoutBtn').addEventListener('click', openOrderFallback);
+    if(el('checkoutForm')) el('checkoutForm').addEventListener('submit', submitFallbackOrder, true);
+  }
+  function boot(){
+    setTimeout(function(){
+      const grid = el('winesGrid');
+      if(grid && grid.children.length === 0){
+        fallbackActive = true;
+        renderFallbackWines(true);
+        updateFallbackCart();
+        bindFallbackControls();
+        console.warn('Vinařství Devátý: aktivován nouzový košík a nouzové odesílání objednávek.');
+      }
+    }, 900);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+
+</body>
+</html>
